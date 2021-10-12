@@ -9,6 +9,18 @@ using Zenject;
 
 public class ShipController : IInitializable, ITickable
 {
+    public float speed = 0.02f;
+    
+    public float maxHp = 30f;
+    public float hp = 30f;
+
+    public float maxEnergy = 100f;
+    public float startingEnergy = 50f;
+    public float energy;
+
+    public float fireEnergyCost = 10f;
+    public float absorbEnergy = 10f;
+
     public enum ActionMode
     {
         Weapon,
@@ -23,12 +35,16 @@ public class ShipController : IInitializable, ITickable
         // Debug.Log(string.Join("\n", Gamepad.all));
     }
 
+    public void Reset()
+    {
+        hp = maxHp;
+        energy = startingEnergy;
+    }
+
     public void Tick()
     {
         var dx = 0;
         var dy = 0;
-
-        var speed = 0.01f;
 
         // Debug.Log(transform.position);
         if (Gamepad.current.aButton.wasPressedThisFrame)
@@ -70,9 +86,18 @@ public class ShipController : IInitializable, ITickable
 
         if (currentActionMode == ActionMode.Weapon)
         {
-            var bullet = bulletFactory.Spawn();
-            bullet.Position = new Vector3(bulletOriginTransform.position.x, bulletOriginTransform.position.y);
-            bullet.Velocity = new Vector3(0f, 10f);
+            if (energy >= fireEnergyCost)
+            {
+                var bullet = bulletFactory.Spawn();
+                bullet.Owner = Bullet.BulletOwner.Player;
+                bullet.Position = new Vector3(bulletOriginTransform.position.x, bulletOriginTransform.position.y);
+                bullet.Velocity = new Vector3(0f, 10f);
+                energy -= fireEnergyCost;
+            }
+            else
+            {
+                // TODO
+            }
         }
     }
 
@@ -92,12 +117,42 @@ public class ShipController : IInitializable, ITickable
         }
     }
 
+    public bool CollideTest(Collider2D otherCollider, Bullet bullet)
+    {
+        if (otherCollider == _boxCollider2D && bullet.Owner == Bullet.BulletOwner.Boss)
+        {
+            hp -= bullet.power;
+            return true;
+        }
+
+        if (otherCollider == _shieldCollider && bullet.Owner == Bullet.BulletOwner.Boss)
+        {
+            energy += absorbEnergy;
+            energy = Math.Min(maxEnergy, energy);
+            return true;
+        }
+
+        return false;
+    }
+
+    public float GetPercentHP()
+    {
+        return hp / maxHp * 100f;
+    }
+    
+    public float GetPercentEnergy()
+    {
+        return energy / maxEnergy * 100f;
+    }
+
     [Inject(Id = "Ship")] private Transform transform;
+    [Inject(Id = "Ship")] private BoxCollider2D _boxCollider2D;
+
+    [Inject(Id = "Ship/Shield")] private BoxCollider2D _shieldCollider;
 
     [Inject(Id = "Ship/Weapon")] private Transform bulletOriginTransform;
 
     [Inject] private Bullet.Pool bulletFactory;
-    [Inject] private Bullet.Pool2 bulletFactory2;
     [Inject] private ShmupSettings _shmupSettings;
 
     [Inject(Id = "Ship/RotationPoint")] private Transform rotationPoint;

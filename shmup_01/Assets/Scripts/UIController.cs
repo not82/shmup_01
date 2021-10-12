@@ -10,16 +10,16 @@ using Zenject;
 
 public class UIController : IInitializable, ITickable
 {
-
     public void Initialize()
     {
-        
     }
 
     public void Tick()
     {
         // TODO Events
         _bossHP.text = _bossController.GetPercentHP().ToString() + '%';
+        _shipHP.text = _shipController.GetPercentHP().ToString() + '%';
+        _shipEnergy.text = _shipController.GetPercentEnergy().ToString() + '%';
     }
 
     private void fire()
@@ -35,6 +35,8 @@ public class UIController : IInitializable, ITickable
     }
 
     [Inject(Id = "UI/BossHP")] private Text _bossHP;
+    [Inject(Id = "UI/ShipHP")] private Text _shipHP;
+    [Inject(Id = "UI/Energy")] private Text _shipEnergy;
+    [Inject] private ShipController _shipController;
     [Inject] private BossController _bossController;
-
 }

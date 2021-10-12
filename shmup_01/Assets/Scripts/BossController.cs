@@ -52,6 +52,10 @@ public class BossController : IInitializable, ITickable
         // }
     }
 
+    public float GetPercentHP()
+    {
+        return hp / maxHp * 100f;
+    }
 
     [Inject(Id = "Boss")] private Transform transform;
 
@@ -64,8 +68,5 @@ public class BossController : IInitializable, ITickable
 
     [Inject(Id = "Ship/RotationPoint")] private Transform rotationPoint;
 
-    public float GetPercentHP()
-    {
-        return hp / maxHp * 100f;
-    }
+    
 }

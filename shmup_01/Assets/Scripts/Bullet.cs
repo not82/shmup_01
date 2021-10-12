@@ -5,10 +5,17 @@ namespace DefaultNamespace
 {
     public class Bullet : MonoBehaviour
     {
+        public enum BulletOwner
+        {
+            Player,
+            Boss
+        }
+
         private Rigidbody2D rigidBody;
 
         public MonoMemoryPool<Bullet> pool;
 
+        public BulletOwner Owner;
         public float power = 10f;
 
         [Inject]
@@ -20,6 +27,11 @@ namespace DefaultNamespace
         public void Update()
         {
             if (Position.y > 10f)
+            {
+                pool.Despawn(this);
+            }
+
+            if (Position.y < -10f)
             {
                 pool.Despawn(this);
             }
@@ -44,6 +56,11 @@ namespace DefaultNamespace
             {
                 pool.Despawn(this);
             }
+
+            if (_shipController.CollideTest(otherCollider, this))
+            {
+                pool.Despawn(this);
+            }
         }
 
         public class Pool : MonoMemoryPool<Bullet>
@@ -65,5 +82,6 @@ namespace DefaultNamespace
         }
 
         [Inject] private EyeController _eyeController;
+        [Inject] private ShipController _shipController;
     }
 }

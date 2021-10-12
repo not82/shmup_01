@@ -22,7 +22,9 @@ namespace DefaultNamespace.GameStates
         public override void OnEnter()
         {
             // Debug.Log("IN GAME ENTER !");
+            _shipController.Reset();
             _bossController.Reset();
+            _turretsController.Reset();
         }
 
         public override void OnExit()
@@ -31,6 +33,8 @@ namespace DefaultNamespace.GameStates
         }
 
         [Inject] private GameStateController _gameStateController;
+        [Inject] private ShipController _shipController;
         [Inject] private BossController _bossController;
+        [Inject] private TurretsController _turretsController;
     }
 }

@@ -14,6 +14,7 @@ public class MainSceneInstaller : MonoInstaller
         Container.BindController<ShipController>();
         Container.BindController<BossController>();
         Container.BindController<EyeController>();
+        Container.BindController<TurretsController>();
 
         Container.BindController<UIController>();
 

@@ -19,6 +19,10 @@ namespace DefaultNamespace.GameStates
             {
                 _gameStateController.SetState(this.GameState);
             }
+            if (_shipController.hp <= 0f)
+            {
+                _gameStateController.SetState(this.GameState);
+            }
 
             if (IsActive)
             {
@@ -40,6 +44,7 @@ namespace DefaultNamespace.GameStates
         }
 
         [Inject(Id = "UI/GameOver")] private RectTransform gameOverRT;
+        [Inject] private ShipController _shipController;
         [Inject] private BossController _bossController;
         [Inject] private GameStateController _gameStateController;
     }
