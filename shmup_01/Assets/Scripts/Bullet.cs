@@ -6,15 +6,17 @@ namespace DefaultNamespace
     public class Bullet : MonoBehaviour
     {
         private Rigidbody2D rigidBody;
-        
+
         public MonoMemoryPool<Bullet> pool;
-        
+
+        public float power = 10f;
+
         [Inject]
         public void Construct()
         {
             rigidBody = GetComponent<Rigidbody2D>();
         }
-        
+
         public void Update()
         {
             if (Position.y > 10f)
@@ -28,11 +30,20 @@ namespace DefaultNamespace
             get { return rigidBody.velocity; }
             set { rigidBody.velocity = value; }
         }
-        
+
         public Vector3 Position
         {
             get { return transform.position; }
             set { transform.position = value; }
+        }
+
+        private void OnTriggerEnter2D(Collider2D otherCollider)
+        {
+            // Debug.Log("COLLISION!");
+            if (_eyeController.CollideTest(otherCollider, this))
+            {
+                pool.Despawn(this);
+            }
         }
 
         public class Pool : MonoMemoryPool<Bullet>
@@ -43,7 +54,7 @@ namespace DefaultNamespace
                 base.OnSpawned(item);
             }
         }
-        
+
         public class Pool2 : MonoMemoryPool<Bullet>
         {
             protected override void OnSpawned(Bullet item)
@@ -52,5 +63,7 @@ namespace DefaultNamespace
                 base.OnSpawned(item);
             }
         }
+
+        [Inject] private EyeController _eyeController;
     }
 }
