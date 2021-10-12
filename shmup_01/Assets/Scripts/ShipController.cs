@@ -28,17 +28,24 @@ public class ShipController : IInitializable, ITickable
     }
 
     private ActionMode currentActionMode;
-
+    private Sequence circleSequence;
+    
     public void Initialize()
     {
         currentActionMode = ActionMode.Weapon;
         // Debug.Log(string.Join("\n", Gamepad.all));
+
+        circleSequence = DOTween.Sequence();
+        circleSequence.Pause();
+        circleSequence.SetAutoKill(false);
+        circleSequence.Append(_circleSR.DOFade(0f, 2f));
     }
 
     public void Reset()
     {
         hp = maxHp;
         energy = startingEnergy;
+        circleSequence.Play();
     }
 
     public void Tick()
@@ -149,9 +156,11 @@ public class ShipController : IInitializable, ITickable
     [Inject(Id = "Ship")] private BoxCollider2D _boxCollider2D;
 
     [Inject(Id = "Ship/Shield")] private BoxCollider2D _shieldCollider;
+    [Inject(Id = "Ship/Circle")] private SpriteRenderer _circleSR;
 
     [Inject(Id = "Ship/Weapon")] private Transform bulletOriginTransform;
 
+    
     [Inject] private Bullet.Pool bulletFactory;
     [Inject] private ShmupSettings _shmupSettings;
 
