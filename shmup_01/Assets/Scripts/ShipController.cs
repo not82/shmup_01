@@ -28,7 +28,13 @@ public class ShipController : IInitializable, ITickable
     }
 
     private ActionMode currentActionMode;
+    
     private Sequence circleSequence;
+    
+    private Sequence hitSequence;
+    private Material defaultMaterial;
+
+    private Sequence shieldHitSequence;
     
     public void Initialize()
     {
@@ -38,7 +44,24 @@ public class ShipController : IInitializable, ITickable
         circleSequence = DOTween.Sequence();
         circleSequence.Pause();
         circleSequence.SetAutoKill(false);
+        circleSequence.AppendInterval(5f);
         circleSequence.Append(_circleSR.DOFade(0f, 2f));
+        
+        defaultMaterial = _hullSR.material;
+        hitSequence = DOTween.Sequence();
+        hitSequence.Pause();
+        hitSequence.SetAutoKill(false);
+        hitSequence.AppendCallback(() => { _hullSR.material = _configScript.HitMaterial; });
+        hitSequence.AppendInterval(0.1f);
+        hitSequence.AppendCallback(() => { _hullSR.material = defaultMaterial; });
+
+        shieldHitSequence = DOTween.Sequence();
+        shieldHitSequence.Pause();
+        shieldHitSequence.SetAutoKill(false);
+        shieldHitSequence.AppendCallback(() => { _shieldSR.material = _configScript.HitMaterial; });
+        shieldHitSequence.AppendInterval(0.1f);
+        shieldHitSequence.AppendCallback(() => { _shieldSR.material = defaultMaterial; });
+
     }
 
     public void Reset()
@@ -129,6 +152,7 @@ public class ShipController : IInitializable, ITickable
         if (otherCollider == _boxCollider2D && bullet.Owner == Bullet.BulletOwner.Boss)
         {
             hp -= bullet.power;
+            hitSequence.Restart();
             return true;
         }
 
@@ -136,6 +160,7 @@ public class ShipController : IInitializable, ITickable
         {
             energy += absorbEnergy;
             energy = Math.Min(maxEnergy, energy);
+            shieldHitSequence.Restart();
             return true;
         }
 
@@ -154,9 +179,13 @@ public class ShipController : IInitializable, ITickable
 
     [Inject(Id = "Ship")] private Transform transform;
     [Inject(Id = "Ship")] private BoxCollider2D _boxCollider2D;
-
+    [Inject(Id = "Ship")] private SpriteRenderer _hullSR;
+    
     [Inject(Id = "Ship/Shield")] private BoxCollider2D _shieldCollider;
+    [Inject(Id = "Ship/Shield")] private SpriteRenderer _shieldSR;
+    
     [Inject(Id = "Ship/Circle")] private SpriteRenderer _circleSR;
+   
 
     [Inject(Id = "Ship/Weapon")] private Transform bulletOriginTransform;
 
@@ -165,4 +194,6 @@ public class ShipController : IInitializable, ITickable
     [Inject] private ShmupSettings _shmupSettings;
 
     [Inject(Id = "Ship/RotationPoint")] private Transform rotationPoint;
+
+    [Inject] private ConfigScript _configScript;
 }

@@ -380,6 +380,8 @@ GameObject:
   - component: {fileID: 310469459}
   - component: {fileID: 310469458}
   - component: {fileID: 310469457}
+  - component: {fileID: 310469460}
+  - component: {fileID: 310469461}
   m_Layer: 0
   m_Name: SceneContext
   m_TagString: Untagged
@@ -447,6 +449,37 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &310469460
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 310469456}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca08b739b59b47939f99252956c27752, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  HitMaterial: {fileID: 2100000, guid: e3265ab4bf004d28a9537516768c1c75, type: 3}
+--- !u!114 &310469461
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 310469456}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0166d8ff8d905b048b2448179e1f5d11, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _components:
+  - {fileID: 310469460}
+  _identifier: 
+  _useSceneContext: 0
+  _context: {fileID: 0}
+  _bindType: 0
 --- !u!1 &408187421
 GameObject:
   m_ObjectHideFlags: 0
@@ -2125,6 +2158,7 @@ MonoBehaviour:
   _components:
   - {fileID: 1475640207}
   - {fileID: 1475640211}
+  - {fileID: 1475640209}
   _identifier: Ship/Shield
   _useSceneContext: 0
   _context: {fileID: 0}
@@ -2550,6 +2584,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _components:
   - {fileID: 1832258272}
+  - {fileID: 1832258270}
   _identifier: Ship
   _useSceneContext: 0
   _context: {fileID: 0}

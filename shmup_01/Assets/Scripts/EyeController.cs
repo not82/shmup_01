@@ -10,6 +10,7 @@ using Zenject;
 public class EyeController : IInitializable, ITickable
 {
     private Sequence hitSequence;
+    private Material defaultMaterial;
 
     public enum BehaviorPhase
     {
@@ -22,13 +23,13 @@ public class EyeController : IInitializable, ITickable
     public void Initialize()
     {
         currentPhase = BehaviorPhase.Opened;
-
-        var baseColor = _spriteRenderer.color;
+        defaultMaterial = _spriteRenderer.material;
         hitSequence = DOTween.Sequence();
         hitSequence.Pause();
         hitSequence.SetAutoKill(false);
-        hitSequence.Append(_spriteRenderer.DOColor(new Color(1f, 1f, 1f), 0.1f));
-        hitSequence.Append(_spriteRenderer.DOColor(baseColor, 0.1f));
+        hitSequence.AppendCallback(() => { _spriteRenderer.material = _configScript.HitMaterial; });
+        hitSequence.AppendInterval(0.1f);
+        hitSequence.AppendCallback(() => { _spriteRenderer.material = defaultMaterial; });
     }
 
     public void Tick()
@@ -46,7 +47,6 @@ public class EyeController : IInitializable, ITickable
             // _spriteRenderer.color.DOColor(new Color(255f, 255f, 255f), 0.5f);
             // _spriteRenderer.color += new Color(40f,40f,40f);
             hitSequence.Restart();
-            hitSequence.Play();
             _bossController.hp -= bullet.power;
             return true;
         }
@@ -59,5 +59,5 @@ public class EyeController : IInitializable, ITickable
     [Inject(Id = "Boss/Eye")] private SpriteRenderer _spriteRenderer;
     [Inject(Id = "Boss/Eye")] private BoxCollider2D _boxCollider2D;
 
-    [Inject] private ShmupSettings _shmupSettings;
+    [Inject] private ConfigScript _configScript;
 }
