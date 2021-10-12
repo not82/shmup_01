@@ -10,7 +10,7 @@ public class ShipController : IInitializable, ITickable
 {
     public void Initialize()
     {
-        Debug.Log(string.Join("\n", Gamepad.all));
+        // Debug.Log(string.Join("\n", Gamepad.all));
     }
 
     public void Tick()
@@ -52,27 +52,17 @@ public class ShipController : IInitializable, ITickable
     private void fire()
     {
         Debug.Log("FIRE!");
-
-        modifierSettings.ModifierSlots.ForEach(slot =>
-        {
-            if (slot.Modifier != null)
-            {
-                slot.Modifier.Fire(slot.ShipSiteTransform);
-            }
-        });
-
-        // var bullet = bulletFactory.Spawn();
-
-        // bullet.Position = new Vector3(bulletOriginTransform.position.x, bulletOriginTransform.position.y);
-        // bullet.Velocity = new Vector3(0f, 10f);
+        var bullet = bulletFactory.Spawn();
+        bullet.Position = new Vector3(bulletOriginTransform.position.x, bulletOriginTransform.position.y);
+        bullet.Velocity = new Vector3(0f, 10f);
     }
 
-    [Inject(Id = "Ship/Transform")] private Transform transform;
+    [Inject(Id = "Ship")] private Transform transform;
 
-    [Inject(Id = "Ship/BulletOrigin/Transform")]
+    [Inject(Id = "Ship/Weapon")]
     private Transform bulletOriginTransform;
 
     [Inject] private Bullet.Pool bulletFactory;
     [Inject] private Bullet.Pool2 bulletFactory2;
-    [Inject] private ModifierSettings modifierSettings;
+    [Inject] private ShmupSettings _shmupSettings;
 }

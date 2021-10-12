@@ -11,15 +11,7 @@ public class MainSceneInstaller : MonoInstaller
     public override void InstallBindings()
     {
         Container.BindController<ShipController>();
-        Container.BindController<ModifierController>();
-        Container.BindController<ModifierSettings>();
-        
-        // Container.BindFactory<Bullet, BulletFactory>()
-        //     .FromPoolableMemoryPool(poolBinder => poolBinder
-        //         .WithInitialSize(20)
-        //         .FromComponentInNewPrefab(BulletPrefab)
-        //         .WithGameObjectName("Bullet")
-        //         .UnderTransformGroup("Bullets"));
+        Container.BindController<ShmupSettings>();
 
         Container.BindMemoryPool<Bullet, Bullet.Pool>()
             .WithInitialSize(20)
