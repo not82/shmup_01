@@ -47,7 +47,7 @@ public class ShipController : IInitializable, IFixedTickable, ITickable
         circleSequence = DOTween.Sequence();
         circleSequence.Pause();
         circleSequence.SetAutoKill(false);
-        circleSequence.AppendInterval(5f);
+        circleSequence.AppendInterval(2f);
         circleSequence.Append(_circleSR.DOFade(0f, 2f));
 
         defaultMaterial = _hullSR.material;
@@ -70,6 +70,7 @@ public class ShipController : IInitializable, IFixedTickable, ITickable
     {
         hp = maxHp;
         energy = startingEnergy;
+        ShowCircle();
         // circleSequence.Play();
     }
 
@@ -158,6 +159,7 @@ public class ShipController : IInitializable, IFixedTickable, ITickable
         {
             hp -= 1;
             hitSequence.Restart();
+            ShowCircle();
             return true;
         }
 
@@ -192,6 +194,12 @@ public class ShipController : IInitializable, IFixedTickable, ITickable
         return transform.position;
     }
 
+    public void ShowCircle()
+    {
+        circleSequence.Restart();
+        lifesViewScript.Show();
+    }
+
     [Inject(Id = "Ship")] private Transform transform;
     [Inject(Id = "Ship")] private BoxCollider2D _boxCollider2D;
     [Inject(Id = "Ship")] private SpriteRenderer _hullSR;
@@ -211,4 +219,5 @@ public class ShipController : IInitializable, IFixedTickable, ITickable
     [Inject(Id = "Ship/RotationPoint")] private Transform rotationPoint;
 
     [Inject] private ConfigScript _configScript;
+    [Inject] private LifesViewScript lifesViewScript;
 }
