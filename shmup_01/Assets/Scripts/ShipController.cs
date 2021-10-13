@@ -7,19 +7,19 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using Zenject;
 
-public class ShipController : IInitializable, ITickable
+public class ShipController : IInitializable, IFixedTickable, ITickable
 {
-    public float speed = 0.02f;
-    
-    public float maxHp = 30f;
-    public float hp = 30f;
+    public float speed = 0.08f;
+
+    public int maxHp = 3;
+    public int hp = 3;
 
     public float maxEnergy = 100f;
-    public float startingEnergy = 50f;
+    public float startingEnergy = 100f;
     public float energy;
 
-    public float fireEnergyCost = 0f;   // 10f
-    public float absorbEnergy = 10f;
+    public float fireEnergyCost = 10f; // 10f
+    public float absorbEnergy = 20f;
 
     public enum ActionMode
     {
@@ -28,14 +28,17 @@ public class ShipController : IInitializable, ITickable
     }
 
     private ActionMode currentActionMode;
-    
+
     private Sequence circleSequence;
-    
+
     private Sequence hitSequence;
     private Material defaultMaterial;
 
     private Sequence shieldHitSequence;
-    
+
+    private float dx;
+    private float dy;
+
     public void Initialize()
     {
         currentActionMode = ActionMode.Weapon;
@@ -46,7 +49,7 @@ public class ShipController : IInitializable, ITickable
         circleSequence.SetAutoKill(false);
         circleSequence.AppendInterval(5f);
         circleSequence.Append(_circleSR.DOFade(0f, 2f));
-        
+
         defaultMaterial = _hullSR.material;
         hitSequence = DOTween.Sequence();
         hitSequence.Pause();
@@ -61,20 +64,19 @@ public class ShipController : IInitializable, ITickable
         shieldHitSequence.AppendCallback(() => { _shieldSR.material = _configScript.HitMaterial; });
         shieldHitSequence.AppendInterval(0.1f);
         shieldHitSequence.AppendCallback(() => { _shieldSR.material = defaultMaterial; });
-
     }
 
     public void Reset()
     {
         hp = maxHp;
         energy = startingEnergy;
-        circleSequence.Play();
+        // circleSequence.Play();
     }
 
     public void Tick()
     {
-        var dx = 0;
-        var dy = 0;
+        dx = 0;
+        dy = 0;
 
         // Debug.Log(transform.position);
         if (Gamepad.current.aButton.wasPressedThisFrame)
@@ -106,7 +108,10 @@ public class ShipController : IInitializable, ITickable
         {
             dy = -1;
         }
+    }
 
+    public void FixedTick()
+    {
         transform.position = new Vector3(transform.position.x + dx * speed, transform.position.y + dy * speed);
     }
 
@@ -137,11 +142,11 @@ public class ShipController : IInitializable, ITickable
         switch (currentActionMode)
         {
             case ActionMode.Weapon:
-                rotationPoint.DOLocalRotate(new Vector3(0, 0, 180), 0.5f);
+                rotationPoint.DOLocalRotate(new Vector3(0, 0, 180), 0.2f);
                 currentActionMode = ActionMode.Shield;
                 break;
             case ActionMode.Shield:
-                rotationPoint.DOLocalRotate(new Vector3(0, 0, 0), 0.5f);
+                rotationPoint.DOLocalRotate(new Vector3(0, 0, 0), 0.2f);
                 currentActionMode = ActionMode.Weapon;
                 break;
         }
@@ -151,7 +156,7 @@ public class ShipController : IInitializable, ITickable
     {
         if (otherCollider == _boxCollider2D && bullet.Owner == Bullet.BulletOwner.Boss)
         {
-            hp -= bullet.power;
+            hp -= 1;
             hitSequence.Restart();
             return true;
         }
@@ -171,7 +176,12 @@ public class ShipController : IInitializable, ITickable
     {
         return hp / maxHp * 100f;
     }
-    
+
+    public int GetHP()
+    {
+        return hp;
+    }
+
     public float GetPercentEnergy()
     {
         return energy / maxEnergy * 100f;
@@ -185,16 +195,16 @@ public class ShipController : IInitializable, ITickable
     [Inject(Id = "Ship")] private Transform transform;
     [Inject(Id = "Ship")] private BoxCollider2D _boxCollider2D;
     [Inject(Id = "Ship")] private SpriteRenderer _hullSR;
-    
+
     [Inject(Id = "Ship/Shield")] private BoxCollider2D _shieldCollider;
     [Inject(Id = "Ship/Shield")] private SpriteRenderer _shieldSR;
-    
+
     [Inject(Id = "Ship/Circle")] private SpriteRenderer _circleSR;
-   
+
 
     [Inject(Id = "Ship/Weapon")] private Transform bulletOriginTransform;
 
-    
+
     [Inject] private Bullet.Pool bulletFactory;
     [Inject] private ShmupSettings _shmupSettings;
 

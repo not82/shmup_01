@@ -19,7 +19,11 @@ public class UIController : IInitializable, ITickable
         // TODO Events
         _bossHP.text = _bossController.GetPercentHP().ToString() + '%';
         _shipHP.text = _shipController.GetPercentHP().ToString() + '%';
+        
         _shipEnergy.text = _shipController.GetPercentEnergy().ToString() + '%';
+        
+        energyViewScript.SetPercentValue(_shipController.GetPercentEnergy());
+        lifesViewScript.SetValue(_shipController.GetHP());
     }
 
     private void fire()
@@ -39,4 +43,6 @@ public class UIController : IInitializable, ITickable
     [Inject(Id = "UI/Energy")] private Text _shipEnergy;
     [Inject] private ShipController _shipController;
     [Inject] private BossController _bossController;
+    [Inject] private EnergyViewScript energyViewScript;
+    [Inject] private LifesViewScript lifesViewScript;
 }

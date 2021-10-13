@@ -10,7 +10,7 @@ namespace DefaultNamespace.BossStates
      */
     public class BossStatePhaseTwo : BaseGameStateController, IInitializable, ITickable
     {
-        private float fireDelay = 0.2f; // In seconds
+        private float fireDelay = 0.3f; // In seconds
         private float lastBulletTime;
 
         public void Initialize()
