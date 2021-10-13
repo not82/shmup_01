@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using DefaultNamespace;
+using DefaultNamespace.BossStates;
 using DefaultNamespace.GameStates;
 using RedMagic.Zenject;
 using UnityEngine;
@@ -12,7 +13,11 @@ public class MainSceneInstaller : MonoInstaller
     public override void InstallBindings()
     {
         Container.BindController<ShipController>();
+        
         Container.BindController<BossController>();
+        Container.BindController<BossStateController>();
+        Container.BindController<BossStatePhaseOne>();
+        Container.BindController<BossStatePhaseTwo>();
         Container.BindController<EyeController>();
         Container.BindController<TurretsController>();
 

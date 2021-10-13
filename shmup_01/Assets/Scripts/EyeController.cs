@@ -36,6 +36,18 @@ public class EyeController : IInitializable, ITickable
     {
     }
 
+    public void Show()
+    {
+        _spriteRenderer.enabled = true;
+        _boxCollider2D.enabled = true;
+    }
+
+    public void Hide()
+    {
+        _spriteRenderer.enabled = false;
+        _boxCollider2D.enabled = false;
+    }
+
     /**
      * On a recu un projectile
      */

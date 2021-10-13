@@ -35,6 +35,9 @@ TextureImporter:
   - first:
       213: -2662085076416708557
     second: boss_eye
+  - first:
+      213: 6411149886804423142
+    second: turret
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -350,6 +353,27 @@ TextureImporter:
       bones: []
       spriteID: 33040523abf5e0bd0800000000000000
       internalID: -2662085076416708557
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: turret
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 208
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6e173c4badaf8f850800000000000000
+      internalID: 6411149886804423142
       vertices: []
       indices: 
       edges: []

@@ -8,6 +8,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using Zenject;
 
+// TODO Use statecontroller
 public class GameStateController : IInitializable, ITickable
 {
     private GameState _currentState;

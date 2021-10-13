@@ -51,7 +51,7 @@ namespace DefaultNamespace
 
         private void OnTriggerEnter2D(Collider2D otherCollider)
         {
-            // Debug.Log("COLLISION!");
+            Debug.Log("COLLISION!");
             if (_eyeController.CollideTest(otherCollider, this))
             {
                 pool.Despawn(this);
@@ -60,6 +60,14 @@ namespace DefaultNamespace
             if (_shipController.CollideTest(otherCollider, this))
             {
                 pool.Despawn(this);
+            }
+
+            foreach (var turret in turretsController.GetAliveTurrets())
+            {
+                if (turret.CollideTest(otherCollider, this))
+                {
+                    pool.Despawn(this);
+                }
             }
         }
 
@@ -83,5 +91,6 @@ namespace DefaultNamespace
 
         [Inject] private EyeController _eyeController;
         [Inject] private ShipController _shipController;
+        [Inject] private TurretsController turretsController;
     }
 }

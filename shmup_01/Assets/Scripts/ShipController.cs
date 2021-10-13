@@ -18,7 +18,7 @@ public class ShipController : IInitializable, ITickable
     public float startingEnergy = 50f;
     public float energy;
 
-    public float fireEnergyCost = 10f;
+    public float fireEnergyCost = 0f;   // 10f
     public float absorbEnergy = 10f;
 
     public enum ActionMode

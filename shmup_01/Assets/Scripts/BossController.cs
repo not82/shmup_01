@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using DefaultNamespace;
+using DefaultNamespace.BossStates;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -34,6 +35,7 @@ public class BossController : IInitializable, ITickable
     {
         hp = maxHp;
         spawnTime = Time.realtimeSinceStartup;
+        bossStateController.SetState(BossState.Phase1);
     }
 
     public void Tick()
@@ -77,4 +79,5 @@ public class BossController : IInitializable, ITickable
     [Inject] private ShmupSettings _shmupSettings;
 
     [Inject(Id = "Ship/RotationPoint")] private Transform rotationPoint;
+    [Inject] private BossStateController bossStateController;
 }

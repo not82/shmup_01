@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using DefaultNamespace;
 using DG.Tweening;
 using UnityEngine;
@@ -13,72 +14,75 @@ public class TurretsController : IInitializable, ITickable
     private float bulletSpeed = 5f;
     private float lastBulletTime;
 
-    public enum BehaviorPhase
-    {
-        Idle,
-        Shooting
-    }
+    public TurretScript turretTopLeft;
+    public TurretScript turretTopRight;
+    public TurretScript turretBottomLeft;
+    public TurretScript turretBottomRight;
 
-    private BehaviorPhase currentPhase;
+    public List<TurretScript> turretList = new List<TurretScript>();
 
     public void Initialize()
     {
-        currentPhase = BehaviorPhase.Idle;
+        foreach (var turretTransform in turrets)
+        {
+            turretList.Add(turretTransform);
+        }
+
+        turretTopLeft = turrets[0];
+        turretTopRight = turrets[1];
+        turretBottomLeft = turrets[2];
+        turretBottomRight = turrets[3];
+
         Reset();
     }
 
     public void Reset()
     {
         lastBulletTime = Time.realtimeSinceStartup;
-        // hp = maxHp;
     }
 
     public void Tick()
     {
-        // var dx = 0;
-        // var dy = 0;
-        // var speed = 0.01f;
-        // transform.position = new Vector3(transform.position.x + dx * speed, transform.position.y + dy * speed);
-        if (Time.realtimeSinceStartup > lastBulletTime + fireDelay)
-        {
-            fireAimed();
-            lastBulletTime = Time.realtimeSinceStartup;
-        }
     }
 
-    private void fire()
+    public void Fire(TurretScript turret)
     {
-        Debug.Log("TURRENTS FIRE !");
-        foreach (var turrentTransform in turrentTransforms)
-        {
-            var position = turrentTransform.position;
-            var bullet = bulletFactory.Spawn();
-            bullet.Owner = Bullet.BulletOwner.Boss;
-            bullet.Position = new Vector3(position.x, position.y);
-            bullet.Velocity = new Vector3(0f, -bulletSpeed);
-        }
+        // Debug.Log("TURRET FIRE !");
+        // foreach (var turret in turrets)
+        // {
+        var position = turret.transform.position;
+        var bullet = bulletFactory.Spawn();
+        bullet.Owner = Bullet.BulletOwner.Boss;
+        bullet.Position = new Vector3(position.x, position.y);
+        bullet.Velocity = new Vector3(0f, -bulletSpeed);
+        // }
     }
 
-    private void fireAimed()
+    public void FireAimed(TurretScript turret)
     {
         var shipPosition = shipController.GetPosition();
-        foreach (var turrentTransform in turrentTransforms)
-        {
-            var position = turrentTransform.position;
-            var direction = shipPosition - position;
-            direction = direction.normalized;
-            var bullet = bulletFactory.Spawn();
-            bullet.Owner = Bullet.BulletOwner.Boss;
-            bullet.Position = new Vector3(position.x, position.y);
-            bullet.Velocity = direction * bulletSpeed;
-        }
+        // foreach (var turret in turrets)
+        // {
+        var position = turret.transform.position;
+        var direction = shipPosition - position;
+        direction = direction.normalized;
+        var bullet = bulletFactory.Spawn();
+        bullet.Owner = Bullet.BulletOwner.Boss;
+        bullet.Position = new Vector3(position.x, position.y);
+        bullet.Velocity = direction * bulletSpeed;
+        // }
 
         // direction = PlayerObject.transform.position - transform.position;
         // direction = direction.normalized;
     }
 
+    public List<TurretScript> GetAliveTurrets()
+    {
+        return turretList.FindAll(turret => { return turret.Hp > 0; });
+    }
 
-    [Inject(Id = "Boss/Turrents")] private Transform[] turrentTransforms;
+
+    [Inject(Id = "Boss/Turrents")] private TurretScript[] turrets;
     [Inject] private Bullet.Pool2 bulletFactory;
     [Inject] private ShipController shipController;
 }
