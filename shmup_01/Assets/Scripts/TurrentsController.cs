@@ -41,7 +41,7 @@ public class TurretsController : IInitializable, ITickable
         // transform.position = new Vector3(transform.position.x + dx * speed, transform.position.y + dy * speed);
         if (Time.realtimeSinceStartup > lastBulletTime + fireDelay)
         {
-            fire();
+            fireAimed();
             lastBulletTime = Time.realtimeSinceStartup;
         }
     }
@@ -59,7 +59,26 @@ public class TurretsController : IInitializable, ITickable
         }
     }
 
+    private void fireAimed()
+    {
+        var shipPosition = shipController.GetPosition();
+        foreach (var turrentTransform in turrentTransforms)
+        {
+            var position = turrentTransform.position;
+            var direction = shipPosition - position;
+            direction = direction.normalized;
+            var bullet = bulletFactory.Spawn();
+            bullet.Owner = Bullet.BulletOwner.Boss;
+            bullet.Position = new Vector3(position.x, position.y);
+            bullet.Velocity = direction * bulletSpeed;
+        }
+
+        // direction = PlayerObject.transform.position - transform.position;
+        // direction = direction.normalized;
+    }
+
 
     [Inject(Id = "Boss/Turrents")] private Transform[] turrentTransforms;
     [Inject] private Bullet.Pool2 bulletFactory;
+    [Inject] private ShipController shipController;
 }

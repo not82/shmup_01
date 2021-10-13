@@ -177,6 +177,11 @@ public class ShipController : IInitializable, ITickable
         return energy / maxEnergy * 100f;
     }
 
+    public Vector3 GetPosition()
+    {
+        return transform.position;
+    }
+
     [Inject(Id = "Ship")] private Transform transform;
     [Inject(Id = "Ship")] private BoxCollider2D _boxCollider2D;
     [Inject(Id = "Ship")] private SpriteRenderer _hullSR;

@@ -18,26 +18,36 @@ public class BossController : IInitializable, ITickable
     public float maxHp = 100f;
     public float hp = 100f;
 
+    public Vector3 basePosition;
+
+    private float spawnTime; // Time when boss as spawned
+
     private BehaviorPhase currentPhase;
 
     public void Initialize()
     {
         currentPhase = BehaviorPhase.Idle;
+        basePosition = transform.position;
     }
 
     public void Reset()
     {
         hp = maxHp;
+        spawnTime = Time.realtimeSinceStartup;
     }
 
     public void Tick()
     {
-        var dx = 0;
-        var dy = 0;
+        // var dx = 0;
+        // var dy = 0;
+        // var speed = 0.01f;
 
-        var speed = 0.01f;
+        var dt = Time.realtimeSinceStartup - spawnTime;
+        var amplitude = 1f;
+        var dx = Mathf.Sin(dt) + 0.5f * Mathf.Sin(dt * 2f);
+        var dy = Mathf.Cos(dt) + 0.5f * Mathf.Cos(dt * 2f);
 
-        transform.position = new Vector3(transform.position.x + dx * speed, transform.position.y + dy * speed);
+        transform.position = new Vector3(basePosition.x + dx * amplitude, basePosition.y + dy * amplitude);
     }
 
     private void fire()
@@ -67,6 +77,4 @@ public class BossController : IInitializable, ITickable
     [Inject] private ShmupSettings _shmupSettings;
 
     [Inject(Id = "Ship/RotationPoint")] private Transform rotationPoint;
-
-    
 }
