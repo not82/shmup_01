@@ -5,10 +5,12 @@ namespace DefaultNamespace.GameStates
 {
     public class BaseGameStateController : IGameStateController
     {
-        public bool IsActive = false; 
+        protected float enterTime;
+        public bool IsActive = false;
 
         public virtual void OnEnter()
         {
+            enterTime = Time.realtimeSinceStartup;
             Debug.Log("BASE ENTER !");
         }
 

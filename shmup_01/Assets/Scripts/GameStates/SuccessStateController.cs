@@ -5,11 +5,11 @@ using Zenject;
 
 namespace DefaultNamespace.GameStates
 {
-    public class GameOverStateController : BaseGameStateController, IInitializable, ITickable
+    public class SuccessStateController : BaseGameStateController, IInitializable, ITickable
     {
         public new void Initialize()
         {
-            gameOverRT.gameObject.SetActive(false);
+            successRT.gameObject.SetActive(false);
         }
 
         public new void Tick()
@@ -27,18 +27,21 @@ namespace DefaultNamespace.GameStates
         public override void OnEnter()
         {
             base.OnEnter();
-            gameOverRT.gameObject.SetActive(true);
+            successRT.gameObject.SetActive(true);
+            successText.text = "You defeated the boss in " + gameController.GetCurrentTime().ToString("F1") + "s";
         }
 
         public override void OnExit()
         {
-            gameOverRT.gameObject.SetActive(false);
+            successRT.gameObject.SetActive(false);
         }
 
-        [Inject(Id = "UI/GameOver")] private RectTransform gameOverRT;
+        [Inject(Id = "UI/Success")] private RectTransform successRT;
+        [Inject(Id = "UI/Success/Subtext")] private Text successText;
 
         [Inject] private ShipController _shipController;
         [Inject] private BossController _bossController;
         [Inject] private GameStateController _gameStateController;
+        [Inject] private GameController gameController;
     }
 }

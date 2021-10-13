@@ -12,16 +12,24 @@ namespace DefaultNamespace.GameStates
 
         public new void Tick()
         {
-            // if (_bossController.hp <= 0f)
-            // {
-            //     _gameController.SetState(GameController.GameStates.GameOver);
-            //     OnEnter();
-            // }
+            if (IsActive)
+            {
+                if (_bossController.hp <= 0f)
+                {
+                    _gameStateController.SetState(GameState.Success);
+                }
+
+                if (_shipController.hp <= 0f)
+                {
+                    _gameStateController.SetState(GameState.GameOver);
+                }
+            }
         }
 
         public override void OnEnter()
         {
             // Debug.Log("IN GAME ENTER !");
+            gameController.Reset();
             _shipController.Reset();
             _bossController.Reset();
             _turretsController.Reset();
@@ -36,5 +44,6 @@ namespace DefaultNamespace.GameStates
         [Inject] private ShipController _shipController;
         [Inject] private BossController _bossController;
         [Inject] private TurretsController _turretsController;
+        [Inject] private GameController gameController;
     }
 }

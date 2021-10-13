@@ -12,8 +12,10 @@ public class MainSceneInstaller : MonoInstaller
 {
     public override void InstallBindings()
     {
+        Container.BindController<GameController>();
+
         Container.BindController<ShipController>();
-        
+
         Container.BindController<BossController>();
         Container.BindController<BossStateController>();
         Container.BindController<BossStatePhaseOne>();
@@ -28,6 +30,7 @@ public class MainSceneInstaller : MonoInstaller
         Container.BindController<GameStateController>();
         Container.BindController<InGameStateController>();
         Container.BindController<GameOverStateController>();
+        Container.BindController<SuccessStateController>();
 
 
         Container.BindMemoryPool<Bullet, Bullet.Pool>()

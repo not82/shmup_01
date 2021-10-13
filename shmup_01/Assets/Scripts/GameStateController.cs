@@ -14,17 +14,19 @@ public class GameStateController : IInitializable, ITickable
     private GameState _currentState;
     private BaseGameStateController _currentStateController;
 
-    private Dictionary<GameState, BaseGameStateController> gameStates = new Dictionary<GameState, BaseGameStateController>();
+    private Dictionary<GameState, BaseGameStateController> gameStates =
+        new Dictionary<GameState, BaseGameStateController>();
 
     public void Initialize()
     {
-        gameStates.Add(GameState.InGame, _inGameStateController);
-        gameStates.Add(GameState.GameOver, _gameOverStateController);
+        gameStates.Add(GameState.InGame, inGameStateController);
+        gameStates.Add(GameState.GameOver, gameOverStateController);
+        gameStates.Add(GameState.Success, successStateController);
 
         SetState(GameState.InGame);
 
         _currentState = GameState.InGame;
-        _currentStateController = _inGameStateController;
+        _currentStateController = inGameStateController;
     }
 
     public void Tick()
@@ -55,6 +57,7 @@ public class GameStateController : IInitializable, ITickable
         _currentStateController.OnEnter();
     }
 
-    [Inject] private GameOverStateController _gameOverStateController;
-    [Inject] private InGameStateController _inGameStateController;
+    [Inject] private GameOverStateController gameOverStateController;
+    [Inject] private SuccessStateController successStateController;
+    [Inject] private InGameStateController inGameStateController;
 }
