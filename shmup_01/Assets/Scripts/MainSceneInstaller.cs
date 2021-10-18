@@ -14,7 +14,17 @@ public class MainSceneInstaller : MonoInstaller
     {
         Container.BindController<GameController>();
 
-        Container.BindController<ShipController>();
+        // Container.BindController<ShipController>();
+
+        // Container
+        // .BindInterfacesAndSelfTo<ShipController>()
+        // .NonLazy();
+
+        // Add a new component to an existing game object
+        // Container.InstantiateComponent<ShipController>(gameObject);
+
+        Container.InstantiateComponent<ShipController>(Ship1);
+        // Container.InstantiateComponent<ShipController>(Ship2);
 
         Container.BindController<BossController>();
         Container.BindController<BossStateController>();
@@ -44,4 +54,7 @@ public class MainSceneInstaller : MonoInstaller
 
     public GameObject Laser1Prefab;
     public GameObject Laser2Prefab;
+
+    public GameObject Ship1;
+    public GameObject Ship2;
 }

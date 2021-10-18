@@ -60,7 +60,7 @@ public class TurretsController : IInitializable, ITickable
 
     public void FireAimed(TurretScript turret)
     {
-        var shipPosition = shipController.GetPosition();
+        var shipPosition = shipControllers[0].GetPosition();
         // foreach (var turret in turrets)
         // {
         var position = turret.transform.position;
@@ -84,5 +84,5 @@ public class TurretsController : IInitializable, ITickable
 
     [Inject(Id = "Boss/Turrents")] private TurretScript[] turrets;
     [Inject] private Bullet.Pool2 bulletFactory;
-    [Inject] private ShipController shipController;
+    [Inject] private List<ShipController> shipControllers;
 }

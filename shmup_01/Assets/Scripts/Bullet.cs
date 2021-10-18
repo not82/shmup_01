@@ -51,7 +51,7 @@ namespace DefaultNamespace
 
         private void OnTriggerEnter2D(Collider2D otherCollider)
         {
-            Debug.Log("COLLISION!");
+            // Debug.Log("COLLISION!");
             if (_eyeController.CollideTest(otherCollider, this))
             {
                 pool.Despawn(this);

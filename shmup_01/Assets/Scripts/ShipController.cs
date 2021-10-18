@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using Zenject;
 
-public class ShipController : IInitializable, IFixedTickable, ITickable
+public class ShipController : MonoBehaviour, IInitializable, IFixedTickable, ITickable
 {
     public float speed = 0.08f;
 
@@ -39,6 +39,25 @@ public class ShipController : IInitializable, IFixedTickable, ITickable
     private float dx;
     private float dy;
 
+    private Gamepad gamepad; // Gamepad lié à ce vaisseau
+
+    public void Awake()
+    {
+        Debug.Log(diContainer);
+        // DiContainer
+        // Initialize();;
+    }
+
+    public void Update()
+    {
+        // Tick();
+    }
+
+    public void FixedUpdate()
+    {
+        // FixedTick();
+    }
+
     public void Initialize()
     {
         currentActionMode = ActionMode.Weapon;
@@ -64,6 +83,10 @@ public class ShipController : IInitializable, IFixedTickable, ITickable
         shieldHitSequence.AppendCallback(() => { _shieldSR.material = _configScript.HitMaterial; });
         shieldHitSequence.AppendInterval(0.1f);
         shieldHitSequence.AppendCallback(() => { _shieldSR.material = defaultMaterial; });
+
+        Debug.Log("GAMEPADS");
+        Debug.Log(Gamepad.all);
+        gamepad = Gamepad.all[0];
     }
 
     public void Reset()
@@ -80,32 +103,32 @@ public class ShipController : IInitializable, IFixedTickable, ITickable
         dy = 0;
 
         // Debug.Log(transform.position);
-        if (Gamepad.current.aButton.wasPressedThisFrame)
+        if (gamepad.aButton.wasPressedThisFrame)
         {
             fire();
         }
 
-        if (Gamepad.current.bButton.wasPressedThisFrame)
+        if (gamepad.bButton.wasPressedThisFrame)
         {
             switchWeaponShieldHandler();
         }
 
-        if (Gamepad.current.leftStick.left.isPressed)
+        if (gamepad.leftStick.left.isPressed)
         {
             dx = -1;
         }
 
-        if (Gamepad.current.leftStick.right.isPressed)
+        if (gamepad.leftStick.right.isPressed)
         {
             dx = 1;
         }
 
-        if (Gamepad.current.leftStick.up.isPressed)
+        if (gamepad.leftStick.up.isPressed)
         {
             dy = 1;
         }
 
-        if (Gamepad.current.leftStick.down.isPressed)
+        if (gamepad.leftStick.down.isPressed)
         {
             dy = -1;
         }
@@ -200,6 +223,8 @@ public class ShipController : IInitializable, IFixedTickable, ITickable
         lifesViewScript.Show();
     }
 
+    // [Inject] private DiContainer _diContainer;
+    
     [Inject(Id = "Ship")] private Transform transform;
     [Inject(Id = "Ship")] private BoxCollider2D _boxCollider2D;
     [Inject(Id = "Ship")] private SpriteRenderer _hullSR;
@@ -210,13 +235,14 @@ public class ShipController : IInitializable, IFixedTickable, ITickable
     [Inject(Id = "Ship/Circle")] private SpriteRenderer _circleSR;
 
 
-    [Inject(Id = "Ship/Weapon")] private Transform bulletOriginTransform;
-
+    // [Inject(Id = "Ship/Weapon")] 
+    private Transform bulletOriginTransform;
+    
+    // [Inject(Id = "Ship/RotationPoint")] 
+    private Transform rotationPoint;
 
     [Inject] private Bullet.Pool bulletFactory;
     [Inject] private ShmupSettings _shmupSettings;
-
-    [Inject(Id = "Ship/RotationPoint")] private Transform rotationPoint;
 
     [Inject] private ConfigScript _configScript;
     [Inject] private LifesViewScript lifesViewScript;

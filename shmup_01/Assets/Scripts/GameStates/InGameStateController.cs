@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using Zenject;
 
 namespace DefaultNamespace.GameStates
@@ -19,10 +20,11 @@ namespace DefaultNamespace.GameStates
                     _gameStateController.SetState(GameState.Success);
                 }
 
-                if (_shipController.hp <= 0f)
-                {
-                    _gameStateController.SetState(GameState.GameOver);
-                }
+                // TODO GAMEOVER ? Revive ? ( si l'autre tir sur la dépouille ? )
+                // if (_shipControllers.hp <= 0f)
+                // {
+                //     _gameStateController.SetState(GameState.GameOver);
+                // }
             }
         }
 
@@ -30,7 +32,7 @@ namespace DefaultNamespace.GameStates
         {
             // Debug.Log("IN GAME ENTER !");
             gameController.Reset();
-            _shipController.Reset();
+            _shipControllers.ForEach(ship => ship.Reset());
             _bossController.Reset();
             _turretsController.Reset();
         }
@@ -41,7 +43,7 @@ namespace DefaultNamespace.GameStates
         }
 
         [Inject] private GameStateController _gameStateController;
-        [Inject] private ShipController _shipController;
+        [Inject] private List<ShipController> _shipControllers;
         [Inject] private BossController _bossController;
         [Inject] private TurretsController _turretsController;
         [Inject] private GameController gameController;
