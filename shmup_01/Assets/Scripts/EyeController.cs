@@ -7,10 +7,13 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using Zenject;
 
-public class EyeController : IInitializable, ITickable
+public class EyeController : MonoBehaviour, IInitializable
 {
     private Sequence hitSequence;
     private Material defaultMaterial;
+
+    public float MaxHp = 100f;
+    public float Hp = 100f;
 
     public enum BehaviorPhase
     {
@@ -20,32 +23,38 @@ public class EyeController : IInitializable, ITickable
 
     private BehaviorPhase currentPhase;
 
+    public void Awake()
+    {
+        Initialize();
+    }
+
     public void Initialize()
     {
         currentPhase = BehaviorPhase.Opened;
-        defaultMaterial = _spriteRenderer.material;
+        defaultMaterial = SR.material;
         hitSequence = DOTween.Sequence();
         hitSequence.Pause();
         hitSequence.SetAutoKill(false);
-        hitSequence.AppendCallback(() => { _spriteRenderer.material = _configScript.HitMaterial; });
+        hitSequence.AppendCallback(() => { SR.material = _configScript.HitMaterial; });
         hitSequence.AppendInterval(0.1f);
-        hitSequence.AppendCallback(() => { _spriteRenderer.material = defaultMaterial; });
-    }
-
-    public void Tick()
-    {
+        hitSequence.AppendCallback(() => { SR.material = defaultMaterial; });
     }
 
     public void Show()
     {
-        _spriteRenderer.enabled = true;
+        SR.enabled = true;
         _boxCollider2D.enabled = true;
     }
 
     public void Hide()
     {
-        _spriteRenderer.enabled = false;
+        SR.enabled = false;
         _boxCollider2D.enabled = false;
+    }
+
+    public void Kill()
+    {
+        SR.enabled = false;
     }
 
     /**
@@ -55,21 +64,24 @@ public class EyeController : IInitializable, ITickable
     {
         if (collider == _boxCollider2D && bullet.OwnerType == Bullet.BulletOwnerType.Player)
         {
-            // Debug.Log("Eye shot !");
-            // _spriteRenderer.color.DOColor(new Color(255f, 255f, 255f), 0.5f);
-            // _spriteRenderer.color += new Color(40f,40f,40f);
+            Hp -= bullet.power;
             hitSequence.Restart();
-            _bossController.hp -= bullet.power;
+            if (Hp <= 0)
+            {
+                Kill();
+            }
+
             return true;
         }
 
         return false;
     }
 
-    [Inject] private BossController _bossController;
 
-    [Inject(Id = "Boss/Eye")] private SpriteRenderer _spriteRenderer;
-    [Inject(Id = "Boss/Eye")] private BoxCollider2D _boxCollider2D;
+    public SpriteRenderer SR;
+    public BoxCollider2D _boxCollider2D;
+
+    // [Inject] private BossController _bossController;
 
     [Inject] private ConfigScript _configScript;
 }

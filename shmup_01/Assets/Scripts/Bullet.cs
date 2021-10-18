@@ -54,14 +54,26 @@ namespace DefaultNamespace
             get { return transform.position; }
             set { transform.position = value; }
         }
+        
+        public Vector3 Orientation
+        {
+            get { return transform.localEulerAngles; }
+            set { transform.localEulerAngles = value; }
+        }
+
 
         private void OnTriggerEnter2D(Collider2D otherCollider)
         {
             Debug.Log(shipControllers.Count);
-            if (_eyeController.CollideTest(otherCollider, this))
+
+            eyeControllers.ForEach(eyeController =>
             {
-                pool.Despawn(this);
-            }
+                if (eyeController.CollideTest(otherCollider, this))
+                {
+                    pool.Despawn(this);
+                }
+            });
+
 
             shipControllers.ForEach(shipController =>
             {
@@ -113,7 +125,7 @@ namespace DefaultNamespace
             }
         }
 
-        [Inject] private EyeController _eyeController;
+        [Inject] private List<EyeController> eyeControllers;
         [Inject] private List<ShipController> shipControllers;
         [Inject] private TurretsController turretsController;
         [Inject] private List<ShieldScript> shieldScripts;

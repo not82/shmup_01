@@ -9,10 +9,10 @@ namespace DefaultNamespace
         public void Initialize()
         {
             AddState(BossState.Phase1, bossStatePhaseOne);
-            AddState(BossState.Phase2, bossStatePhaseTwo);
+            AddState(BossState.Dead, bossStateDead);
         }
 
         [Inject] private BossStatePhaseOne bossStatePhaseOne;
-        [Inject] private BossStatePhaseTwo bossStatePhaseTwo;
+        [Inject] private BossStateDead bossStateDead;
     }
 }

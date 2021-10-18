@@ -19,8 +19,9 @@ public class MainSceneInstaller : MonoInstaller
         Container.BindController<BossController>();
         Container.BindController<BossStateController>();
         Container.BindController<BossStatePhaseOne>();
-        Container.BindController<BossStatePhaseTwo>();
-        Container.BindController<EyeController>();
+        // Container.BindController<BossStatePhaseTwo>();
+        Container.BindController<BossStateDead>();
+        // Container.BindController<EyeController>();
         Container.BindController<TurretsController>();
 
         Container.BindController<UIController>();

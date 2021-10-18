@@ -23,11 +23,11 @@ public class BossController : IInitializable, ITickable
 
     private float spawnTime; // Time when boss as spawned
 
-    private BehaviorPhase currentPhase;
+    public BehaviorPhase CurrentPhase;
 
     public void Initialize()
     {
-        currentPhase = BehaviorPhase.Idle;
+        CurrentPhase = BehaviorPhase.Idle;
         basePosition = transform.position;
     }
 
@@ -45,11 +45,12 @@ public class BossController : IInitializable, ITickable
         // var speed = 0.01f;
 
         var dt = Time.realtimeSinceStartup - spawnTime;
-        var amplitude = 1f;
+        var amplitudeX = 0.5f;
+        var amplitudeY = 0.2f;
         var dx = Mathf.Sin(dt) + 0.5f * Mathf.Sin(dt * 2f);
         var dy = Mathf.Cos(dt) + 0.5f * Mathf.Cos(dt * 2f);
 
-        transform.position = new Vector3(basePosition.x + dx * amplitude, basePosition.y + dy * amplitude);
+        transform.position = new Vector3(basePosition.x + dx * amplitudeX, basePosition.y + dy * amplitudeY);
     }
 
     private void fire()
@@ -69,12 +70,24 @@ public class BossController : IInitializable, ITickable
         return hp / maxHp * 100f;
     }
 
+    public BossTurrentEyeLinkScript GetTopLink()
+    {
+        return TurrentEyeLinks[0];
+    }
+
+    public BossTurrentEyeLinkScript GetBottomLink()
+    {
+        return TurrentEyeLinks[1];
+    }
+
     [Inject(Id = "Boss")] private Transform transform;
-    
+
 
     [Inject] private Bullet.Pool bulletFactory;
     [Inject] private Bullet.Pool2 bulletFactory2;
     [Inject] private ShmupSettings _shmupSettings;
-    
+
     [Inject] private BossStateController bossStateController;
+
+    [Inject] public List<BossTurrentEyeLinkScript> TurrentEyeLinks;
 }

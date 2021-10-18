@@ -24,37 +24,44 @@ namespace DefaultNamespace.BossStates
             {
                 return;
             }
-            var turrets = turretsController.GetAliveTurrets();
 
+            if (
+                bossController.GetBottomLink().CurrentState == BossTurrentEyeLinkScript.State.EyeDead
+                && bossController.GetTopLink().CurrentState == BossTurrentEyeLinkScript.State.EyeDead
+            )
+            {
+                bossStateController.SetState(BossState.Dead);
+            }
+
+            var turrets = turretsController.GetAliveTurrets();
             if (turrets.Count > 0)
             {
                 if (Time.realtimeSinceStartup > lastBulletTime + fireDelay)
                 {
                     foreach (var turret in turrets)
                     {
-                        turretsController.Fire(turret);
+                        turretsController.FireConic(turret, 10, 2f);
                     }
 
                     lastBulletTime = Time.realtimeSinceStartup;
                 }
-            }
-            else
-            {
-                // Phase 2
-                bossStateController.SetState(BossState.Phase2);
             }
         }
 
         public override void OnEnter()
         {
             Debug.Log("BOSS STATE1 ENTER !");
+
+            bossController.GetTopLink().TurretAliveEnter();
+            bossController.GetBottomLink().TurretAliveEnter();
+
             // Show only bottom turrets
-            turretsController.turretTopLeft.Hide();
-            turretsController.turretTopRight.Hide();
-            turretsController.turretBottomLeft.Show();
-            turretsController.turretBottomRight.Show();
-            eyeController.Hide();
-            
+            // turretsController.turretTopLeft.Hide();
+            // turretsController.turretTopRight.Hide();
+            // turretsController.turretBottomLeft.Show();
+            // turretsController.turretBottomRight.Show();
+            // eyeController.Hide();
+
             lastBulletTime = Time.realtimeSinceStartup;
         }
 
@@ -65,6 +72,8 @@ namespace DefaultNamespace.BossStates
 
         [Inject] private TurretsController turretsController;
         [Inject] private BossStateController bossStateController;
-        [Inject] private EyeController eyeController;
+
+        [Inject] private BossController bossController;
+        // [Inject] private EyeController eyeController;
     }
 }

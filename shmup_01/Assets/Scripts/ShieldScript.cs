@@ -26,11 +26,13 @@ namespace DefaultNamespace
         public void Show()
         {
             SR.enabled = true;
+            BC.enabled = true;
         }
 
         public void Hide()
         {
             SR.enabled = false;
+            BC.enabled = false;
         }
 
         public bool CollideTest(Collider2D otherCollider, Bullet bullet)

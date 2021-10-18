@@ -9,13 +9,15 @@ namespace DefaultNamespace
         public float HpMax;
         public float Hp;
 
+        public float BulletOrientation = 1f;
+        
         public SpriteRenderer SR;
         public Transform Transform;
         public BoxCollider2D BC;
-
+        public ShieldScript ShieldScript;
+                
         private Sequence hitSequence;
         private Material defaultMaterial;
-
 
         public void Awake()
         {
@@ -43,11 +45,12 @@ namespace DefaultNamespace
         {
             Hp = 0;
             SR.enabled = false;
+            ShieldScript.Hide();
         }
 
         public void Kill()
         {
-            SR.enabled = false;
+            Hide();
         }
 
         public bool CollideTest(Collider2D otherCollider, Bullet bullet)

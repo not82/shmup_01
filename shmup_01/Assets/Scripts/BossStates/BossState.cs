@@ -3,6 +3,6 @@
     public enum BossState
     {
         Phase1,
-        Phase2
+        Dead
     }
 }

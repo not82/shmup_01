@@ -23,8 +23,8 @@ public class ShipController : MonoBehaviour, IInitializable, IFixedTickable, ITi
     public float fireEnergyCost = 10f; // 10f
     public float absorbEnergy = 20f;
 
-    public float bulletSpeed = 10f;
-    public float bulletOrientation = 1f;
+    public float BulletSpeed = 10f;
+    public float BulletOrientation = 1f;
 
     public enum ActionMode
     {
@@ -152,7 +152,7 @@ public class ShipController : MonoBehaviour, IInitializable, IFixedTickable, ITi
                 bullet.OwnerType = Bullet.BulletOwnerType.Player;
                 bullet.Owner = gameObject;
                 bullet.Position = new Vector3(bulletOriginTransform.position.x, bulletOriginTransform.position.y);
-                bullet.Velocity = new Vector3(0f, bulletOrientation * bulletSpeed);
+                bullet.Velocity = new Vector3(0f, BulletOrientation * BulletSpeed);
                 energy -= fireEnergyCost;
             }
             else

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using DefaultNamespace.BossStates;
 using UnityEngine;
 using Zenject;
 
@@ -15,7 +16,7 @@ namespace DefaultNamespace.GameStates
         {
             if (IsActive)
             {
-                if (bossController.hp <= 0f)
+                if (bossStateController.GetCurrentState() == BossState.Dead)
                 {
                     gameStateController.SetState(GameState.Success);
                 }
@@ -48,6 +49,7 @@ namespace DefaultNamespace.GameStates
         [Inject] private GameStateController gameStateController;
         [Inject] private List<ShipController> shipControllers;
         [Inject] private BossController bossController;
+        [Inject] private BossStateController bossStateController;
         [Inject] private TurretsController turretsController;
         [Inject] private GameController gameController;
     }

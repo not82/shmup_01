@@ -54,8 +54,31 @@ public class TurretsController : IInitializable, ITickable
         var bullet = bulletFactory.Spawn();
         bullet.OwnerType = Bullet.BulletOwnerType.Boss;
         bullet.Position = new Vector3(position.x, position.y);
-        bullet.Velocity = new Vector3(0f, -bulletSpeed);
+        bullet.Velocity = new Vector3(0f, -bulletSpeed * turret.BulletOrientation);
         // }
+    }
+
+    public void FireConic(TurretScript turret, int bulletNumber, float speed)
+    {
+        var position = turret.transform.position;
+
+        var minAngle = -90;
+        var maxAngle = 90;
+
+        for (var iBullet = 0; iBullet < bulletNumber; iBullet++)
+        {
+            var bullet = bulletFactory.Spawn();
+            bullet.OwnerType = Bullet.BulletOwnerType.Boss;
+            bullet.Position = new Vector3(position.x, position.y);
+
+            var angle = Mathf.Lerp(minAngle, maxAngle, iBullet / (float) (bulletNumber - 1));
+            var dy = Mathf.Sin(angle * Mathf.Deg2Rad);
+            var dx = Mathf.Cos(angle * Mathf.Deg2Rad);
+
+            // bullet.Velocity = new Vector3(-bulletSpeed * dx, -bulletSpeed * turret.BulletOrientation);
+            bullet.Velocity = new Vector3(-speed * dy * turret.BulletOrientation, -speed * dx * turret.BulletOrientation);
+            bullet.Orientation = new Vector3(0f, 0f, angle);
+        }
     }
 
     public void FireAimed(TurretScript turret)

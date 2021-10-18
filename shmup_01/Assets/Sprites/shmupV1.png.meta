@@ -58,7 +58,19 @@ TextureImporter:
     second: well_done
   - first:
       213: 8675420352676631669
-    second: shmupV1_6
+    second: boss_2
+  - first:
+      213: -5186461096897368360
+    second: boss_eye
+  - first:
+      213: 7176916233011981299
+    second: turret_base
+  - first:
+      213: 6102161018166828016
+    second: turret_cannon
+  - first:
+      213: 6103100381146716227
+    second: turret_shield
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -358,27 +370,6 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: boss_eye
-      rect:
-        serializedVersion: 2
-        x: 112
-        y: 192
-        width: 16
-        height: 16
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 33040523abf5e0bd0800000000000000
-      internalID: -2662085076416708557
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
       name: turret
       rect:
         serializedVersion: 2
@@ -526,7 +517,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: shmupV1_6
+      name: boss_2
       rect:
         serializedVersion: 2
         x: 388
@@ -534,7 +525,7 @@ TextureImporter:
         width: 112
         height: 160
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -542,6 +533,90 @@ TextureImporter:
       bones: []
       spriteID: 5741c7ea8d8456870800000000000000
       internalID: 8675420352676631669
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boss_eye
+      rect:
+        serializedVersion: 2
+        x: 98
+        y: 192
+        width: 12
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8deac068c1df508b0800000000000000
+      internalID: -5186461096897368360
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: turret_base
+      rect:
+        serializedVersion: 2
+        x: 162
+        y: 210
+        width: 11
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3fbe96bf947899360800000000000000
+      internalID: 7176916233011981299
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: turret_cannon
+      rect:
+        serializedVersion: 2
+        x: 163
+        y: 192
+        width: 9
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0fbd11a8d1b3fa450800000000000000
+      internalID: 6102161018166828016
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: turret_shield
+      rect:
+        serializedVersion: 2
+        x: 157
+        y: 179
+        width: 20
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3481dc6067192b450800000000000000
+      internalID: 6103100381146716227
       vertices: []
       indices: 
       edges: []
