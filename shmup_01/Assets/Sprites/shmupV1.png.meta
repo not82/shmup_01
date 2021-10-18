@@ -56,6 +56,9 @@ TextureImporter:
   - first:
       213: 5465662352729407323
     second: well_done
+  - first:
+      213: 8675420352676631669
+    second: shmupV1_6
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -405,7 +408,7 @@ TextureImporter:
         width: 7
         height: 6
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -447,7 +450,7 @@ TextureImporter:
         width: 17
         height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -468,7 +471,7 @@ TextureImporter:
         width: 88
         height: 8
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 3, y: 0, z: 3, w: 0}
       outline: []
       physicsShape: []
@@ -489,7 +492,7 @@ TextureImporter:
         width: 175
         height: 14
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -510,7 +513,7 @@ TextureImporter:
         width: 178
         height: 14
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -518,6 +521,27 @@ TextureImporter:
       bones: []
       spriteID: b5f79a493fee9db40800000000000000
       internalID: 5465662352729407323
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: shmupV1_6
+      rect:
+        serializedVersion: 2
+        x: 388
+        y: 84
+        width: 112
+        height: 160
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5741c7ea8d8456870800000000000000
+      internalID: 8675420352676631669
       vertices: []
       indices: 
       edges: []

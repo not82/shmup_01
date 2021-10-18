@@ -19,7 +19,7 @@ namespace DefaultNamespace
 
         // Pour distinguer les 2 joueurs
         public GameObject Owner;
-        
+
         public BulletOwnerType OwnerType;
         public float power = 10f;
 
@@ -78,6 +78,21 @@ namespace DefaultNamespace
                     pool.Despawn(this);
                 }
             }
+
+            shieldScripts.ForEach(shieldScript =>
+            {
+                if (shieldScript.CollideTest(otherCollider, this))
+                {
+                    // pool.Despawn(this);
+                    // Renvoi de la bullet
+                    OwnerType = BulletOwnerType.Boss;
+                    Velocity = -Velocity / 2f;
+                }
+            });
+        }
+
+        private void OnCollisionEnter2D(Collision2D other)
+        {
         }
 
         public class Pool : MonoMemoryPool<Bullet>
@@ -101,5 +116,6 @@ namespace DefaultNamespace
         [Inject] private EyeController _eyeController;
         [Inject] private List<ShipController> shipControllers;
         [Inject] private TurretsController turretsController;
+        [Inject] private List<ShieldScript> shieldScripts;
     }
 }
