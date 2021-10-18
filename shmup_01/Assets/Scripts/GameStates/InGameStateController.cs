@@ -15,15 +15,19 @@ namespace DefaultNamespace.GameStates
         {
             if (IsActive)
             {
-                if (_bossController.hp <= 0f)
+                if (bossController.hp <= 0f)
                 {
-                    _gameStateController.SetState(GameState.Success);
+                    gameStateController.SetState(GameState.Success);
                 }
 
-                if (_shipController[0].hp <= 0f)
+
+                shipControllers.ForEach(shipController =>
                 {
-                    _gameStateController.SetState(GameState.GameOver);
-                }
+                    if (shipController.hp <= 0f)
+                    {
+                        gameStateController.SetState(GameState.GameOver);
+                    }
+                });
             }
         }
 
@@ -31,9 +35,9 @@ namespace DefaultNamespace.GameStates
         {
             // Debug.Log("IN GAME ENTER !");
             gameController.Reset();
-            _shipController[0].Reset();
-            _bossController.Reset();
-            _turretsController.Reset();
+            shipControllers.ForEach(shipController => { shipController.Reset(); });
+            bossController.Reset();
+            turretsController.Reset();
         }
 
         public override void OnExit()
@@ -41,10 +45,10 @@ namespace DefaultNamespace.GameStates
             // Debug.Log("IN GAME EXIT !");
         }
 
-        [Inject] private GameStateController _gameStateController;
-        [Inject] private List<ShipController> _shipController;
-        [Inject] private BossController _bossController;
-        [Inject] private TurretsController _turretsController;
+        [Inject] private GameStateController gameStateController;
+        [Inject] private List<ShipController> shipControllers;
+        [Inject] private BossController bossController;
+        [Inject] private TurretsController turretsController;
         [Inject] private GameController gameController;
     }
 }

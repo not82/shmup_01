@@ -1036,8 +1036,10 @@ MonoBehaviour:
   maxEnergy: 100
   startingEnergy: 100
   energy: 100
-  fireEnergyCost: 10
+  fireEnergyCost: 0
   absorbEnergy: 20
+  bulletSpeed: 10
+  bulletOrientation: 1
   transform: {fileID: 1733739249522422982}
   _boxCollider2D: {fileID: 0}
   _hullSR: {fileID: 0}

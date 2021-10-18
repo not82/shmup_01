@@ -7,7 +7,7 @@ namespace DefaultNamespace
 {
     public class Bullet : MonoBehaviour
     {
-        public enum BulletOwner
+        public enum BulletOwnerType
         {
             Player,
             Boss
@@ -17,7 +17,10 @@ namespace DefaultNamespace
 
         public MonoMemoryPool<Bullet> pool;
 
-        public BulletOwner Owner;
+        // Pour distinguer les 2 joueurs
+        public GameObject Owner;
+        
+        public BulletOwnerType OwnerType;
         public float power = 10f;
 
         [Inject]
@@ -54,7 +57,6 @@ namespace DefaultNamespace
 
         private void OnTriggerEnter2D(Collider2D otherCollider)
         {
-            Debug.Log("COLLISION!");
             Debug.Log(shipControllers.Count);
             if (_eyeController.CollideTest(otherCollider, this))
             {
@@ -63,7 +65,6 @@ namespace DefaultNamespace
 
             shipControllers.ForEach(shipController =>
             {
-                Debug.Log("COLLISION2!");
                 if (shipController.CollideTest(otherCollider, this))
                 {
                     pool.Despawn(this);

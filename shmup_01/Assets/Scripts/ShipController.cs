@@ -23,6 +23,9 @@ public class ShipController : MonoBehaviour, IInitializable, IFixedTickable, ITi
     public float fireEnergyCost = 10f; // 10f
     public float absorbEnergy = 20f;
 
+    public float bulletSpeed = 10f;
+    public float bulletOrientation = 1f;
+
     public enum ActionMode
     {
         Weapon,
@@ -146,9 +149,10 @@ public class ShipController : MonoBehaviour, IInitializable, IFixedTickable, ITi
             if (energy >= fireEnergyCost)
             {
                 var bullet = bulletFactory.Spawn();
-                bullet.Owner = Bullet.BulletOwner.Player;
+                bullet.OwnerType = Bullet.BulletOwnerType.Player;
+                bullet.Owner = gameObject;
                 bullet.Position = new Vector3(bulletOriginTransform.position.x, bulletOriginTransform.position.y);
-                bullet.Velocity = new Vector3(0f, 10f);
+                bullet.Velocity = new Vector3(0f, bulletOrientation * bulletSpeed);
                 energy -= fireEnergyCost;
             }
             else
@@ -176,7 +180,7 @@ public class ShipController : MonoBehaviour, IInitializable, IFixedTickable, ITi
 
     public bool CollideTest(Collider2D otherCollider, Bullet bullet)
     {
-        if (otherCollider == _boxCollider2D && bullet.Owner == Bullet.BulletOwner.Boss)
+        if (otherCollider == _boxCollider2D && bullet.OwnerType == Bullet.BulletOwnerType.Boss)
         {
             hp -= 1;
             hitSequence.Restart();
@@ -184,7 +188,16 @@ public class ShipController : MonoBehaviour, IInitializable, IFixedTickable, ITi
             return true;
         }
 
-        if (otherCollider == _shieldCollider && bullet.Owner == Bullet.BulletOwner.Boss)
+        if (otherCollider == _boxCollider2D && bullet.OwnerType == Bullet.BulletOwnerType.Player &&
+            bullet.Owner != gameObject)
+        {
+            hp -= 1;
+            hitSequence.Restart();
+            ShowCircle();
+            return true;
+        }
+
+        if (otherCollider == _shieldCollider && bullet.OwnerType == Bullet.BulletOwnerType.Boss)
         {
             energy += absorbEnergy;
             energy = Math.Min(maxEnergy, energy);

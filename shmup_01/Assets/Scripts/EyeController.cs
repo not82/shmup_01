@@ -53,7 +53,7 @@ public class EyeController : IInitializable, ITickable
      */
     public bool CollideTest(Collider2D collider, Bullet bullet)
     {
-        if (collider == _boxCollider2D && bullet.Owner == Bullet.BulletOwner.Player)
+        if (collider == _boxCollider2D && bullet.OwnerType == Bullet.BulletOwnerType.Player)
         {
             // Debug.Log("Eye shot !");
             // _spriteRenderer.color.DOColor(new Color(255f, 255f, 255f), 0.5f);

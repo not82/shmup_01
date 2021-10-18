@@ -52,7 +52,7 @@ public class TurretsController : IInitializable, ITickable
         // {
         var position = turret.transform.position;
         var bullet = bulletFactory.Spawn();
-        bullet.Owner = Bullet.BulletOwner.Boss;
+        bullet.OwnerType = Bullet.BulletOwnerType.Boss;
         bullet.Position = new Vector3(position.x, position.y);
         bullet.Velocity = new Vector3(0f, -bulletSpeed);
         // }
@@ -67,7 +67,7 @@ public class TurretsController : IInitializable, ITickable
         var direction = shipPosition - position;
         direction = direction.normalized;
         var bullet = bulletFactory.Spawn();
-        bullet.Owner = Bullet.BulletOwner.Boss;
+        bullet.OwnerType = Bullet.BulletOwnerType.Boss;
         bullet.Position = new Vector3(position.x, position.y);
         bullet.Velocity = direction * bulletSpeed;
         // }

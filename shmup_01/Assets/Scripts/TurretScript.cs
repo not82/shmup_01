@@ -52,7 +52,7 @@ namespace DefaultNamespace
 
         public bool CollideTest(Collider2D otherCollider, Bullet bullet)
         {
-            if (otherCollider == BC && bullet.Owner == Bullet.BulletOwner.Player)
+            if (otherCollider == BC && bullet.OwnerType == Bullet.BulletOwnerType.Player)
             {
                 Hp -= bullet.power;
                 hitSequence.Restart();
