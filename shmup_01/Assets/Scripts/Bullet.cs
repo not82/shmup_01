@@ -54,13 +54,6 @@ namespace DefaultNamespace
             get { return transform.position; }
             set { transform.position = value; }
         }
-        
-        public Vector3 Orientation
-        {
-            get { return transform.localEulerAngles; }
-            set { transform.localEulerAngles = value; }
-        }
-
 
         private void OnTriggerEnter2D(Collider2D otherCollider)
         {

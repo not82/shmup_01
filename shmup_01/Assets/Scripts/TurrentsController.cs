@@ -77,7 +77,11 @@ public class TurretsController : IInitializable, ITickable
 
             // bullet.Velocity = new Vector3(-bulletSpeed * dx, -bulletSpeed * turret.BulletOrientation);
             bullet.Velocity = new Vector3(-speed * dy * turret.BulletOrientation, -speed * dx * turret.BulletOrientation);
-            bullet.Orientation = new Vector3(0f, 0f, angle);
+            var realAngle = Mathf.Atan2(bullet.Velocity.y, bullet.Velocity.x) * Mathf.Rad2Deg;
+            bullet.transform.rotation = Quaternion.AngleAxis(realAngle - 90, Vector3.forward);
+            
+            // bullet.Orientation = new Vector3(0f, 0f, angle * turret.BulletOrientation);
+            // bullet.transform.rotation = Quaternion.LookRotation(bullet.Velocity);
         }
     }
 
