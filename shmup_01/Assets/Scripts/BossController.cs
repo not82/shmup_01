@@ -70,14 +70,11 @@ public class BossController : IInitializable, ITickable
     }
 
     [Inject(Id = "Boss")] private Transform transform;
-
-    [Inject(Id = "Ship/Weapon")] private Transform bulletOriginTransform;
-
+    
 
     [Inject] private Bullet.Pool bulletFactory;
     [Inject] private Bullet.Pool2 bulletFactory2;
     [Inject] private ShmupSettings _shmupSettings;
-
-    [Inject(Id = "Ship/RotationPoint")] private Transform rotationPoint;
+    
     [Inject] private BossStateController bossStateController;
 }

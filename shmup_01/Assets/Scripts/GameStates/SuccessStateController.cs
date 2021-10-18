@@ -39,8 +39,6 @@ namespace DefaultNamespace.GameStates
         [Inject(Id = "UI/Success")] private RectTransform successRT;
         [Inject(Id = "UI/Success/Subtext")] private Text successText;
 
-        [Inject] private ShipController _shipController;
-        [Inject] private BossController _bossController;
         [Inject] private GameStateController _gameStateController;
         [Inject] private GameController gameController;
     }

@@ -7,8 +7,10 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using Zenject;
 
-public class ShipController : IInitializable, IFixedTickable, ITickable
+public class ShipController : MonoBehaviour, IInitializable, IFixedTickable, ITickable
 {
+    public int gamepadIndex;
+
     public float speed = 0.08f;
 
     public int maxHp = 3;
@@ -39,8 +41,27 @@ public class ShipController : IInitializable, IFixedTickable, ITickable
     private float dx;
     private float dy;
 
+    private Gamepad gamepad;
+
+    public void Awake()
+    {
+        Initialize();
+    }
+
+    public void Update()
+    {
+        Tick();
+    }
+
+    public void FixedUpdate()
+    {
+        FixedTick();
+    }
+
     public void Initialize()
     {
+        gamepad = Gamepad.all[gamepadIndex];
+
         currentActionMode = ActionMode.Weapon;
         // Debug.Log(string.Join("\n", Gamepad.all));
 
@@ -80,35 +101,35 @@ public class ShipController : IInitializable, IFixedTickable, ITickable
         dy = 0;
 
         // Debug.Log(transform.position);
-        if (Gamepad.current.aButton.wasPressedThisFrame)
+        if (gamepad.aButton.wasPressedThisFrame)
         {
             fire();
         }
 
-        if (Gamepad.current.bButton.wasPressedThisFrame)
+        if (gamepad.bButton.wasPressedThisFrame)
         {
             switchWeaponShieldHandler();
         }
 
-        if (Gamepad.current.leftStick.left.isPressed)
+        if (gamepad.leftStick.left.isPressed)
         {
             dx = -1;
         }
 
-        if (Gamepad.current.leftStick.right.isPressed)
+        if (gamepad.leftStick.right.isPressed)
         {
             dx = 1;
         }
 
-        if (Gamepad.current.leftStick.up.isPressed)
-        {
-            dy = 1;
-        }
-
-        if (Gamepad.current.leftStick.down.isPressed)
-        {
-            dy = -1;
-        }
+        // if (gamepad.leftStick.up.isPressed)
+        // {
+        //     dy = 1;
+        // }
+        //
+        // if (gamepad.leftStick.down.isPressed)
+        // {
+        //     dy = -1;
+        // }
     }
 
     public void FixedTick()
@@ -196,28 +217,21 @@ public class ShipController : IInitializable, IFixedTickable, ITickable
 
     public void ShowCircle()
     {
-        circleSequence.Restart();
-        lifesViewScript.Show();
+        // circleSequence.Restart();
+        // lifesViewScript.Show();
     }
 
-    [Inject(Id = "Ship")] private Transform transform;
-    [Inject(Id = "Ship")] private BoxCollider2D _boxCollider2D;
-    [Inject(Id = "Ship")] private SpriteRenderer _hullSR;
-
-    [Inject(Id = "Ship/Shield")] private BoxCollider2D _shieldCollider;
-    [Inject(Id = "Ship/Shield")] private SpriteRenderer _shieldSR;
-
-    [Inject(Id = "Ship/Circle")] private SpriteRenderer _circleSR;
-
-
-    [Inject(Id = "Ship/Weapon")] private Transform bulletOriginTransform;
-
+    public Transform transform;
+    public BoxCollider2D _boxCollider2D;
+    public SpriteRenderer _hullSR;
+    public BoxCollider2D _shieldCollider;
+    public SpriteRenderer _shieldSR;
+    public SpriteRenderer _circleSR;
+    public Transform rotationPoint;
+    public Transform bulletOriginTransform;
+    public LifesViewScript lifesViewScript;
 
     [Inject] private Bullet.Pool bulletFactory;
-    [Inject] private ShmupSettings _shmupSettings;
-
-    [Inject(Id = "Ship/RotationPoint")] private Transform rotationPoint;
 
     [Inject] private ConfigScript _configScript;
-    [Inject] private LifesViewScript lifesViewScript;
 }

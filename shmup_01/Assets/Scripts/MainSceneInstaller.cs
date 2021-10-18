@@ -14,7 +14,7 @@ public class MainSceneInstaller : MonoInstaller
     {
         Container.BindController<GameController>();
 
-        Container.BindController<ShipController>();
+        // Container.BindController<ShipController>();
 
         Container.BindController<BossController>();
         Container.BindController<BossStateController>();

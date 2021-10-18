@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections.Generic;
+using UnityEngine;
 using Zenject;
 
 namespace DefaultNamespace
@@ -22,6 +24,7 @@ namespace DefaultNamespace
         public void Construct()
         {
             rigidBody = GetComponent<Rigidbody2D>();
+            // Debug.Log(shipControllers);
         }
 
         public void Update()
@@ -52,15 +55,20 @@ namespace DefaultNamespace
         private void OnTriggerEnter2D(Collider2D otherCollider)
         {
             Debug.Log("COLLISION!");
+            Debug.Log(shipControllers.Count);
             if (_eyeController.CollideTest(otherCollider, this))
             {
                 pool.Despawn(this);
             }
 
-            if (_shipController.CollideTest(otherCollider, this))
+            shipControllers.ForEach(shipController =>
             {
-                pool.Despawn(this);
-            }
+                Debug.Log("COLLISION2!");
+                if (shipController.CollideTest(otherCollider, this))
+                {
+                    pool.Despawn(this);
+                }
+            });
 
             foreach (var turret in turretsController.GetAliveTurrets())
             {
@@ -90,7 +98,7 @@ namespace DefaultNamespace
         }
 
         [Inject] private EyeController _eyeController;
-        [Inject] private ShipController _shipController;
+        [Inject] private List<ShipController> shipControllers;
         [Inject] private TurretsController turretsController;
     }
 }

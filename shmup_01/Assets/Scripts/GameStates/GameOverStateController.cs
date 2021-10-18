@@ -37,8 +37,6 @@ namespace DefaultNamespace.GameStates
 
         [Inject(Id = "UI/GameOver")] private RectTransform gameOverRT;
 
-        [Inject] private ShipController _shipController;
-        [Inject] private BossController _bossController;
         [Inject] private GameStateController _gameStateController;
     }
 }

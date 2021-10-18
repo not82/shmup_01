@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using Zenject;
 
 namespace DefaultNamespace.GameStates
@@ -19,7 +20,7 @@ namespace DefaultNamespace.GameStates
                     _gameStateController.SetState(GameState.Success);
                 }
 
-                if (_shipController.hp <= 0f)
+                if (_shipController[0].hp <= 0f)
                 {
                     _gameStateController.SetState(GameState.GameOver);
                 }
@@ -30,7 +31,7 @@ namespace DefaultNamespace.GameStates
         {
             // Debug.Log("IN GAME ENTER !");
             gameController.Reset();
-            _shipController.Reset();
+            _shipController[0].Reset();
             _bossController.Reset();
             _turretsController.Reset();
         }
@@ -41,7 +42,7 @@ namespace DefaultNamespace.GameStates
         }
 
         [Inject] private GameStateController _gameStateController;
-        [Inject] private ShipController _shipController;
+        [Inject] private List<ShipController> _shipController;
         [Inject] private BossController _bossController;
         [Inject] private TurretsController _turretsController;
         [Inject] private GameController gameController;
