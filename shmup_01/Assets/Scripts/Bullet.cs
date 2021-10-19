@@ -86,10 +86,16 @@ namespace DefaultNamespace
             {
                 if (shieldScript.CollideTest(otherCollider, this))
                 {
-                    // pool.Despawn(this);
                     // Renvoi de la bullet
-                    OwnerType = BulletOwnerType.Boss;
-                    Velocity = -Velocity / 2f;
+                    if (shieldScript.Reflect)
+                    {
+                        OwnerType = BulletOwnerType.Boss;
+                        Velocity = -Velocity / 2f;
+                    }
+                    else
+                    {
+                        pool.Despawn(this);
+                    }
                 }
             });
         }

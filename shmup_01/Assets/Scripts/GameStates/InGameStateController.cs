@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using DefaultNamespace.BossStates;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using Zenject;
 
 namespace DefaultNamespace.GameStates
@@ -29,6 +30,11 @@ namespace DefaultNamespace.GameStates
                         gameStateController.SetState(GameState.GameOver);
                     }
                 });
+                
+                if (Gamepad.current.startButton.wasPressedThisFrame)
+                {
+                    gameStateController.SetState(GameState.InGame);
+                }
             }
         }
 

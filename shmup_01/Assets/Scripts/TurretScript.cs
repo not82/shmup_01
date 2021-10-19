@@ -1,4 +1,6 @@
-﻿using DG.Tweening;
+﻿using System;
+using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 using Zenject;
 
@@ -20,6 +22,11 @@ namespace DefaultNamespace
 
         public Transform GunTranform;
 
+        public float LastBulletTime;
+        public int CurrentSalveIndexInSalve;
+        public List<float> CurrentSalve;
+        
+        
         private Sequence hitSequence;
         private Material defaultMaterial;
 
@@ -34,15 +41,15 @@ namespace DefaultNamespace
             hitSequence.AppendCallback(() => { SR.material = defaultMaterial; });
         }
 
-        // public void Reset()
-        // {
-        //     Hp = HpMax;
-        // }
-
         public void Show()
         {
             SR.enabled = true;
             Hp = HpMax;
+            LastBulletTime = Time.realtimeSinceStartup;
+            if (ShieldScript.gameObject.activeSelf)
+            {
+                ShieldScript.Show();
+            }
         }
 
         public void Hide()

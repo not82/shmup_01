@@ -85,7 +85,7 @@ public class TurretsController : IInitializable, ITickable
             aimedAngle = Mathf.Atan2(direction.Value.y, direction.Value.x) * Mathf.Rad2Deg;
         }
 
-        turret.GunTranform.rotation = Quaternion.Euler(0, 0, aimedAngle + 90);
+        // turret.GunTranform.rotation = Quaternion.Euler(0, 0, aimedAngle + 90);
 
         for (var iBullet = 0; iBullet < bulletNumber; iBullet++)
         {

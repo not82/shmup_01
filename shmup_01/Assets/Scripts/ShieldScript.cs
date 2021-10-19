@@ -9,6 +9,11 @@ namespace DefaultNamespace
         public SpriteRenderer SR;
         public Collider2D BC;
 
+        public bool Reflect = false;
+
+        public float Hp = 100;
+        public float MaxHp = 100;
+
         private Sequence hitSequence;
         private Material defaultMaterial;
 
@@ -25,6 +30,7 @@ namespace DefaultNamespace
 
         public void Show()
         {
+            Hp = MaxHp;
             SR.enabled = true;
             BC.enabled = true;
         }
@@ -39,13 +45,23 @@ namespace DefaultNamespace
         {
             if (otherCollider == BC && bullet.OwnerType == Bullet.BulletOwnerType.Player)
             {
+                Hp -= bullet.power;
                 hitSequence.Restart();
+                if (Hp <= 0)
+                {
+                    Kill();
+                }
                 return true;
             }
 
             return false;
         }
 
+        public void Kill()
+        {
+            Hide();
+        }
+        
         [Inject] private ConfigScript configScript;
     }
 }

@@ -17,7 +17,7 @@ namespace DefaultNamespace.GameStates
             if (IsActive)
             {
                 var elapsedTime = Time.realtimeSinceStartup - enterTime;
-                if (Gamepad.current.aButton.wasPressedThisFrame && elapsedTime > 2f)
+                if (Gamepad.current.startButton.wasPressedThisFrame && elapsedTime > 2f)
                 {
                     _gameStateController.SetState(GameState.InGame);
                 }

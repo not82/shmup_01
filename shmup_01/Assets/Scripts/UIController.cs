@@ -18,7 +18,7 @@ public class UIController : IInitializable, ITickable
     {
         // TODO Events
         _bossHP.text = _bossController.GetPercentHP().ToString() + '%';
-        _shipHP.text = _shipControllers[0].GetPercentHP().ToString() + '%';
+        // _shipHP.text = _shipControllers[0].GetPercentHP().ToString() + '%';
 
         _shipEnergy.text = _shipControllers[0].GetPercentEnergy().ToString() + '%';
 
@@ -39,7 +39,7 @@ public class UIController : IInitializable, ITickable
     }
 
     [Inject(Id = "UI/BossHP")] private Text _bossHP;
-    [Inject(Id = "UI/ShipHP")] private Text _shipHP;
+    // [Inject(Id = "UI/ShipHP")] private Text _shipHP;
     [Inject(Id = "UI/Energy")] private Text _shipEnergy;
     [Inject] private List<ShipController> _shipControllers;
 

@@ -27,7 +27,12 @@ public class ShipController : MonoBehaviour, IInitializable, IFixedTickable, ITi
     public float BulletOrientation = 1f;
 
     public bool VerticalLocked = false;
-    
+
+    public bool AutoFire = true;
+    public float AutoFireSpeed = 0.2f;
+
+    public LifesScript LifesScript;
+
     public enum ActionMode
     {
         Weapon,
@@ -46,7 +51,11 @@ public class ShipController : MonoBehaviour, IInitializable, IFixedTickable, ITi
     private float dx;
     private float dy;
 
+    private float lastFireTime = -1f;
+
     private Gamepad gamepad;
+
+    private Vector2 screenBounds;
 
     public void Awake()
     {
@@ -65,16 +74,18 @@ public class ShipController : MonoBehaviour, IInitializable, IFixedTickable, ITi
 
     public void Initialize()
     {
+        screenBounds =
+            Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, Camera.main.transform.position.z));
         gamepad = Gamepad.all[gamepadIndex];
 
         currentActionMode = ActionMode.Weapon;
         // Debug.Log(string.Join("\n", Gamepad.all));
 
-        circleSequence = DOTween.Sequence();
-        circleSequence.Pause();
-        circleSequence.SetAutoKill(false);
-        circleSequence.AppendInterval(2f);
-        circleSequence.Append(_circleSR.DOFade(0f, 2f));
+        // circleSequence = DOTween.Sequence();
+        // circleSequence.Pause();
+        // circleSequence.SetAutoKill(false);
+        // circleSequence.AppendInterval(2f);
+        // circleSequence.Append(_circleSR.DOFade(0f, 2f));
 
         defaultMaterial = _hullSR.material;
         hitSequence = DOTween.Sequence();
@@ -84,19 +95,21 @@ public class ShipController : MonoBehaviour, IInitializable, IFixedTickable, ITi
         hitSequence.AppendInterval(0.1f);
         hitSequence.AppendCallback(() => { _hullSR.material = defaultMaterial; });
 
-        shieldHitSequence = DOTween.Sequence();
-        shieldHitSequence.Pause();
-        shieldHitSequence.SetAutoKill(false);
-        shieldHitSequence.AppendCallback(() => { _shieldSR.material = _configScript.HitMaterial; });
-        shieldHitSequence.AppendInterval(0.1f);
-        shieldHitSequence.AppendCallback(() => { _shieldSR.material = defaultMaterial; });
+        // shieldHitSequence = DOTween.Sequence();
+        // shieldHitSequence.Pause();
+        // shieldHitSequence.SetAutoKill(false);
+        // shieldHitSequence.AppendCallback(() => { _shieldSR.material = _configScript.HitMaterial; });
+        // shieldHitSequence.AppendInterval(0.1f);
+        // shieldHitSequence.AppendCallback(() => { _shieldSR.material = defaultMaterial; });
     }
 
     public void Reset()
     {
         hp = maxHp;
+        LifesScript.SetValue(hp);
         energy = startingEnergy;
-        ShowCircle();
+        lastFireTime = Time.realtimeSinceStartup;
+        // ShowCircle();
         // circleSequence.Play();
     }
 
@@ -106,15 +119,25 @@ public class ShipController : MonoBehaviour, IInitializable, IFixedTickable, ITi
         dy = 0;
 
         // Debug.Log(transform.position);
-        if (gamepad.aButton.wasPressedThisFrame)
+        if (AutoFire)
         {
-            fire();
+            if (gamepad.aButton.isPressed)
+            {
+                tryToFire();
+            }
+        }
+        else
+        {
+            if (gamepad.aButton.wasPressedThisFrame)
+            {
+                fire();
+            }
         }
 
-        if (gamepad.bButton.wasPressedThisFrame)
-        {
-            switchWeaponShieldHandler();
-        }
+        // if (gamepad.bButton.wasPressedThisFrame)
+        // {
+        //     switchWeaponShieldHandler();
+        // }
 
         if (gamepad.leftStick.left.isPressed)
         {
@@ -132,7 +155,7 @@ public class ShipController : MonoBehaviour, IInitializable, IFixedTickable, ITi
             {
                 dy = 1;
             }
-        
+
             if (gamepad.leftStick.down.isPressed)
             {
                 dy = -1;
@@ -142,7 +165,19 @@ public class ShipController : MonoBehaviour, IInitializable, IFixedTickable, ITi
 
     public void FixedTick()
     {
-        transform.position = new Vector3(transform.position.x + dx * speed, transform.position.y + dy * speed);
+        var margin = 0.2f;
+        transform.position =
+            new Vector3(
+                Mathf.Clamp(transform.position.x + dx * speed, -screenBounds.x + margin, screenBounds.x - margin),
+                Mathf.Clamp(transform.position.y + dy * speed, -screenBounds.y + margin, screenBounds.y + margin));
+    }
+
+    private void tryToFire()
+    {
+        if (Time.realtimeSinceStartup > lastFireTime + AutoFireSpeed)
+        {
+            fire();
+        }
     }
 
     private void fire()
@@ -159,6 +194,8 @@ public class ShipController : MonoBehaviour, IInitializable, IFixedTickable, ITi
                 bullet.Position = new Vector3(bulletOriginTransform.position.x, bulletOriginTransform.position.y);
                 bullet.Velocity = new Vector3(0f, BulletOrientation * BulletSpeed);
                 energy -= fireEnergyCost;
+
+                lastFireTime = Time.realtimeSinceStartup;
             }
             else
             {
@@ -188,6 +225,7 @@ public class ShipController : MonoBehaviour, IInitializable, IFixedTickable, ITi
         if (otherCollider == _boxCollider2D && bullet.OwnerType == Bullet.BulletOwnerType.Boss)
         {
             hp -= 1;
+            LifesScript.SetValue(hp);
             hitSequence.Restart();
             ShowCircle();
             return true;
@@ -197,6 +235,7 @@ public class ShipController : MonoBehaviour, IInitializable, IFixedTickable, ITi
             bullet.Owner != gameObject)
         {
             hp -= 1;
+            LifesScript.SetValue(hp);
             hitSequence.Restart();
             ShowCircle();
             return true;
