@@ -14,11 +14,14 @@ namespace DefaultNamespace.Helpers
             ShipController nearestShip = null;
             foreach (var player in shipControllers)
             {
-                var distance = Vector2.Distance(player.transform.position, position);
-                if (nearestShip == null || nearestDistance > distance)
+                if (player.CurrentState != ShipController.State.Dead)
                 {
-                    nearestShip = player;
-                    nearestDistance = distance;
+                    var distance = Vector2.Distance(player.transform.position, position);
+                    if (nearestShip == null || nearestDistance > distance)
+                    {
+                        nearestShip = player;
+                        nearestDistance = distance;
+                    }
                 }
             }
 

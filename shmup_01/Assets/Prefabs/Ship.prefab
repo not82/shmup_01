@@ -73,7 +73,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 9
   m_Sprite: {fileID: -7785082525526838358, guid: a24cb0c5d6a4c1b4e98998355b0c6b84, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -1041,15 +1041,14 @@ MonoBehaviour:
   BulletSpeed: 10
   BulletOrientation: 1
   VerticalLocked: 0
+  AutoFire: 1
+  AutoFireSpeed: 0.2
+  RespawnUntouchableTime: 5
+  LifesScript: {fileID: 0}
   transform: {fileID: 1733739249522422982}
   _boxCollider2D: {fileID: 1733739248088274263}
   _hullSR: {fileID: 1733739248088274281}
-  _shieldCollider: {fileID: 0}
-  _shieldSR: {fileID: 0}
-  _circleSR: {fileID: 0}
-  rotationPoint: {fileID: 0}
   bulletOriginTransform: {fileID: 1733739248088274282}
-  lifesViewScript: {fileID: 1733739248121540197}
 --- !u!1 &1733739249541366049
 GameObject:
   m_ObjectHideFlags: 0

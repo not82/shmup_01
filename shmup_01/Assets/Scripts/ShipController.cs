@@ -31,19 +31,25 @@ public class ShipController : MonoBehaviour, IInitializable, IFixedTickable, ITi
     public bool AutoFire = true;
     public float AutoFireSpeed = 0.2f;
 
+    public float RespawnUntouchableTime = 5f;
+    private float lastRespawnTime;
+    private Vector2 respawnPosition;
+
     public LifesScript LifesScript;
 
-    public enum ActionMode
+    public enum State
     {
-        Weapon,
-        Shield
+        Dead,
+        Respawning,
+        Alive
     }
 
-    private ActionMode currentActionMode;
+    private State currentState;
 
     private Sequence circleSequence;
 
     private Sequence hitSequence;
+    private Sequence blinkSequence;
     private Material defaultMaterial;
 
     private Sequence shieldHitSequence;
@@ -57,9 +63,12 @@ public class ShipController : MonoBehaviour, IInitializable, IFixedTickable, ITi
 
     private Vector2 screenBounds;
 
+    public State CurrentState => currentState;
+
     public void Awake()
     {
         Initialize();
+        respawnPosition = new Vector2(transform.position.x, transform.position.y);
     }
 
     public void Update()
@@ -74,18 +83,16 @@ public class ShipController : MonoBehaviour, IInitializable, IFixedTickable, ITi
 
     public void Initialize()
     {
+        if (gamepadIndex >= Gamepad.all.Count)
+        {
+            // No gamepad => disable this ship
+            deadStart();
+            return;
+        }
+
         screenBounds =
             Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, Camera.main.transform.position.z));
         gamepad = Gamepad.all[gamepadIndex];
-
-        currentActionMode = ActionMode.Weapon;
-        // Debug.Log(string.Join("\n", Gamepad.all));
-
-        // circleSequence = DOTween.Sequence();
-        // circleSequence.Pause();
-        // circleSequence.SetAutoKill(false);
-        // circleSequence.AppendInterval(2f);
-        // circleSequence.Append(_circleSR.DOFade(0f, 2f));
 
         defaultMaterial = _hullSR.material;
         hitSequence = DOTween.Sequence();
@@ -95,22 +102,23 @@ public class ShipController : MonoBehaviour, IInitializable, IFixedTickable, ITi
         hitSequence.AppendInterval(0.1f);
         hitSequence.AppendCallback(() => { _hullSR.material = defaultMaterial; });
 
-        // shieldHitSequence = DOTween.Sequence();
-        // shieldHitSequence.Pause();
-        // shieldHitSequence.SetAutoKill(false);
-        // shieldHitSequence.AppendCallback(() => { _shieldSR.material = _configScript.HitMaterial; });
-        // shieldHitSequence.AppendInterval(0.1f);
-        // shieldHitSequence.AppendCallback(() => { _shieldSR.material = defaultMaterial; });
+        blinkSequence = DOTween.Sequence();
+        blinkSequence.Pause();
+        blinkSequence.SetAutoKill(false);
+        blinkSequence.SetLoops(-1);
+        blinkSequence.AppendCallback(() => { _hullSR.enabled = false; });
+        blinkSequence.AppendInterval(0.1f);
+        blinkSequence.AppendCallback(() => { _hullSR.enabled = true; });
+        blinkSequence.AppendInterval(0.1f);
     }
 
     public void Reset()
     {
         hp = maxHp;
-        LifesScript.SetValue(hp);
+        LifesScript.SetValue(hp - 1);
         energy = startingEnergy;
         lastFireTime = Time.realtimeSinceStartup;
-        // ShowCircle();
-        // circleSequence.Play();
+        aliveStart();
     }
 
     public void Tick()
@@ -118,7 +126,6 @@ public class ShipController : MonoBehaviour, IInitializable, IFixedTickable, ITi
         dx = 0;
         dy = 0;
 
-        // Debug.Log(transform.position);
         if (AutoFire)
         {
             if (gamepad.aButton.isPressed)
@@ -134,10 +141,10 @@ public class ShipController : MonoBehaviour, IInitializable, IFixedTickable, ITi
             }
         }
 
-        // if (gamepad.bButton.wasPressedThisFrame)
-        // {
-        //     switchWeaponShieldHandler();
-        // }
+        if (gamepad.bButton.wasPressedThisFrame)
+        {
+            blinkSequence.Restart();
+        }
 
         if (gamepad.leftStick.left.isPressed)
         {
@@ -161,6 +168,14 @@ public class ShipController : MonoBehaviour, IInitializable, IFixedTickable, ITi
                 dy = -1;
             }
         }
+
+        if (CurrentState == State.Respawning)
+        {
+            if (Time.realtimeSinceStartup > lastRespawnTime + RespawnUntouchableTime)
+            {
+                respawnOver();
+            }
+        }
     }
 
     public void FixedTick()
@@ -182,86 +197,57 @@ public class ShipController : MonoBehaviour, IInitializable, IFixedTickable, ITi
 
     private void fire()
     {
-        // Debug.Log("FIRE!");
-
-        if (currentActionMode == ActionMode.Weapon)
+        if (energy >= fireEnergyCost)
         {
-            if (energy >= fireEnergyCost)
-            {
-                var bullet = bulletFactory.Spawn();
-                bullet.OwnerType = Bullet.BulletOwnerType.Player;
-                bullet.Owner = gameObject;
-                bullet.Position = new Vector3(bulletOriginTransform.position.x, bulletOriginTransform.position.y);
-                bullet.Velocity = new Vector3(0f, BulletOrientation * BulletSpeed);
-                energy -= fireEnergyCost;
+            var bullet = bulletFactory.Spawn();
+            bullet.OwnerType = Bullet.BulletOwnerType.Player;
+            bullet.Owner = gameObject;
+            bullet.Position = new Vector3(bulletOriginTransform.position.x, bulletOriginTransform.position.y);
+            bullet.Velocity = new Vector3(0f, BulletOrientation * BulletSpeed);
+            energy -= fireEnergyCost;
 
-                lastFireTime = Time.realtimeSinceStartup;
-            }
-            else
-            {
-                // TODO
-            }
+            lastFireTime = Time.realtimeSinceStartup;
         }
-    }
-
-    private void switchWeaponShieldHandler()
-    {
-        Debug.Log("SWITCH!");
-        switch (currentActionMode)
+        else
         {
-            case ActionMode.Weapon:
-                rotationPoint.DOLocalRotate(new Vector3(0, 0, 180), 0.2f);
-                currentActionMode = ActionMode.Shield;
-                break;
-            case ActionMode.Shield:
-                rotationPoint.DOLocalRotate(new Vector3(0, 0, 0), 0.2f);
-                currentActionMode = ActionMode.Weapon;
-                break;
+            // TODO
         }
     }
 
     public bool CollideTest(Collider2D otherCollider, Bullet bullet)
     {
+        // Hit by boss
         if (otherCollider == _boxCollider2D && bullet.OwnerType == Bullet.BulletOwnerType.Boss)
         {
-            hp -= 1;
-            hp = Math.Max(0, hp);
-            LifesScript.SetValue(hp);
-            hitSequence.Restart();
-            ShowCircle();
+            manageHit();
             return true;
         }
 
+        // Hit by player
         if (otherCollider == _boxCollider2D && bullet.OwnerType == Bullet.BulletOwnerType.Player &&
             bullet.Owner != gameObject)
         {
-            hp -= 1;
-            hp = Math.Max(0, hp);
-            LifesScript.SetValue(hp);
-            hitSequence.Restart();
-            ShowCircle();
-            return true;
-        }
-
-        if (otherCollider == _shieldCollider && bullet.OwnerType == Bullet.BulletOwnerType.Boss)
-        {
-            energy += absorbEnergy;
-            energy = Math.Min(maxEnergy, energy);
-            shieldHitSequence.Restart();
+            manageHit();
             return true;
         }
 
         return false;
     }
 
-    public float GetPercentHP()
+    private void manageHit()
     {
-        return hp / maxHp * 100f;
-    }
-
-    public int GetHP()
-    {
-        return hp;
+        hp -= 1;
+        hp = Math.Max(0, hp);
+        if (hp > 0)
+        {
+            LifesScript.SetValue(hp - 1);
+            respawnStart();
+        }
+        else
+        {
+            deadStart();
+            // TODO Gameover
+        }
     }
 
     public float GetPercentEnergy()
@@ -274,21 +260,40 @@ public class ShipController : MonoBehaviour, IInitializable, IFixedTickable, ITi
         return transform.position;
     }
 
-    public void ShowCircle()
+    private void respawnStart()
     {
-        // circleSequence.Restart();
-        // lifesViewScript.Show();
+        currentState = State.Respawning;
+        lastRespawnTime = Time.realtimeSinceStartup;
+        _boxCollider2D.enabled = false;
+        transform.position = new Vector3(respawnPosition.x, respawnPosition.y);
+        blinkSequence.Restart();
+    }
+
+    public void respawnOver()
+    {
+        blinkSequence.Pause();
+        _hullSR.enabled = true;
+        _boxCollider2D.enabled = true;
+        currentState = State.Alive;
+    }
+
+    public void deadStart()
+    {
+        gameObject.SetActive(false);
+        currentState = State.Dead;
+    }
+
+    public void aliveStart()
+    {
+        respawnOver();
+        gameObject.SetActive(true);
+        currentState = State.Alive;
     }
 
     public Transform transform;
     public BoxCollider2D _boxCollider2D;
     public SpriteRenderer _hullSR;
-    public BoxCollider2D _shieldCollider;
-    public SpriteRenderer _shieldSR;
-    public SpriteRenderer _circleSR;
-    public Transform rotationPoint;
     public Transform bulletOriginTransform;
-    public LifesViewScript lifesViewScript;
 
     [Inject] private Bullet.Pool bulletFactory;
 

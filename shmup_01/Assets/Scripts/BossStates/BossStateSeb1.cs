@@ -49,31 +49,36 @@ namespace DefaultNamespace.BossStates
             foreach (var turret in turrets)
             {
                 // Turrents target is the nearest player
-                // turret.CurrentTarget = shipControllers[0];
                 turret.CurrentTarget = shmupHelper.getNearestPlayerShip(turret.transform.position);
-                var direction = (Vector2) turret.CurrentTarget.transform.position -
-                                (Vector2) turret.transform.position;
-                var aimedAngle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-                turret.GunTranform.rotation = Quaternion.Euler(0, 0, aimedAngle + 90);
+                if (turret.CurrentTarget != null)
+                {
+                    var direction = (Vector2) turret.CurrentTarget.transform.position -
+                                    (Vector2) turret.transform.position;
+                    var aimedAngle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+                    turret.GunTranform.rotation = Quaternion.Euler(0, 0, aimedAngle + 90);
+                }
             }
 
 
             foreach (var turret in turrets)
             {
-                turret.CurrentSalve = salveDefinitons[4 - turrets.Count];
-                if (Time.realtimeSinceStartup >
-                    turret.LastBulletTime + turret.CurrentSalve[turret.CurrentSalveIndexInSalve])
+                if (turret.CurrentTarget != null)
                 {
-                    var direction = (Vector2) turret.CurrentTarget.transform.position -
-                                    (Vector2) turret.transform.position;
-                    // direction = direction.normalized;
-                    turretsController.FireConic(turret, 3, 3f, 30f, direction);
-                    turret.LastBulletTime = Time.realtimeSinceStartup;
-
-                    turret.CurrentSalveIndexInSalve++;
-                    if (turret.CurrentSalveIndexInSalve >= turret.CurrentSalve.Count)
+                    turret.CurrentSalve = salveDefinitons[4 - turrets.Count];
+                    if (Time.realtimeSinceStartup >
+                        turret.LastBulletTime + turret.CurrentSalve[turret.CurrentSalveIndexInSalve])
                     {
-                        turret.CurrentSalveIndexInSalve = 0;
+                        var direction = (Vector2) turret.CurrentTarget.transform.position -
+                                        (Vector2) turret.transform.position;
+                        // direction = direction.normalized;
+                        turretsController.FireConic(turret, 3, 3f, 30f, direction);
+                        turret.LastBulletTime = Time.realtimeSinceStartup;
+
+                        turret.CurrentSalveIndexInSalve++;
+                        if (turret.CurrentSalveIndexInSalve >= turret.CurrentSalve.Count)
+                        {
+                            turret.CurrentSalveIndexInSalve = 0;
+                        }
                     }
                 }
             }

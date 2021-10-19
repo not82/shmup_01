@@ -1271,6 +1271,10 @@ PrefabInstance:
       propertyPath: bulletOrientation
       value: -1
       objectReference: {fileID: 0}
+    - target: {fileID: -7991120535309357551, guid: 37cbf7d9c5b5edb4ab91fb9794c28b52, type: 3}
+      propertyPath: RespawnUntouchableTime
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 1733739248125283031, guid: 37cbf7d9c5b5edb4ab91fb9794c28b52, type: 3}
       propertyPath: _context
       value: 
@@ -2628,6 +2632,10 @@ PrefabInstance:
     - target: {fileID: -7991120535309357551, guid: 37cbf7d9c5b5edb4ab91fb9794c28b52, type: 3}
       propertyPath: AutoFireSpeed
       value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: -7991120535309357551, guid: 37cbf7d9c5b5edb4ab91fb9794c28b52, type: 3}
+      propertyPath: RespawnUntouchableTime
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1733739248125283031, guid: 37cbf7d9c5b5edb4ab91fb9794c28b52, type: 3}
       propertyPath: _context

@@ -26,6 +26,7 @@ namespace DefaultNamespace.GameStates
 
                 var totalHp = 0;
                 shipControllers.ForEach(shipController => { totalHp += shipController.hp; });
+                
                 if (totalHp <= 0f)
                 {
                     gameStateController.SetState(GameState.GameOver);
