@@ -74,7 +74,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -7113562260754259817, guid: a24cb0c5d6a4c1b4e98998355b0c6b84, type: 3}
+  m_Sprite: {fileID: -7785082525526838358, guid: a24cb0c5d6a4c1b4e98998355b0c6b84, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -105,7 +105,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 7
 --- !u!61 &1733739248088274263
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -119,18 +119,18 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.0027891286, y: -0.004183922}
+  m_Offset: {x: -0.0009969473, y: 0.017775416}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.34, y: 0.18}
+    oldSize: {x: 0.16, y: 0.16}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.10979334, y: 0.10142589}
+  m_Size: {x: 0.13856769, y: 0.12414241}
   m_EdgeRadius: 0
 --- !u!114 &1733739248088274280
 MonoBehaviour:
@@ -237,7 +237,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1733739248125283048
 Transform:
   m_ObjectHideFlags: 0
@@ -514,7 +514,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1733739248730121272
 Transform:
   m_ObjectHideFlags: 0
@@ -646,7 +646,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 7
 --- !u!1 &1733739248820608697
 GameObject:
   m_ObjectHideFlags: 0
@@ -745,7 +745,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1733739249104109639
 Transform:
   m_ObjectHideFlags: 0
@@ -1038,16 +1038,17 @@ MonoBehaviour:
   energy: 100
   fireEnergyCost: 0
   absorbEnergy: 20
-  bulletSpeed: 10
-  bulletOrientation: 1
+  BulletSpeed: 10
+  BulletOrientation: 1
+  VerticalLocked: 0
   transform: {fileID: 1733739249522422982}
-  _boxCollider2D: {fileID: 0}
-  _hullSR: {fileID: 0}
+  _boxCollider2D: {fileID: 1733739248088274263}
+  _hullSR: {fileID: 1733739248088274281}
   _shieldCollider: {fileID: 0}
   _shieldSR: {fileID: 0}
   _circleSR: {fileID: 0}
   rotationPoint: {fileID: 0}
-  bulletOriginTransform: {fileID: 0}
+  bulletOriginTransform: {fileID: 1733739248088274282}
   lifesViewScript: {fileID: 1733739248121540197}
 --- !u!1 &1733739249541366049
 GameObject:

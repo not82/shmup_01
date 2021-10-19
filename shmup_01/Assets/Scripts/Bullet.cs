@@ -57,8 +57,6 @@ namespace DefaultNamespace
 
         private void OnTriggerEnter2D(Collider2D otherCollider)
         {
-            Debug.Log(shipControllers.Count);
-
             eyeControllers.ForEach(eyeController =>
             {
                 if (eyeController.CollideTest(otherCollider, this))

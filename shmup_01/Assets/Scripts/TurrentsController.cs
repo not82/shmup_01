@@ -58,12 +58,34 @@ public class TurretsController : IInitializable, ITickable
         // }
     }
 
-    public void FireConic(TurretScript turret, int bulletNumber, float speed)
+    public void FireConic(TurretScript turret, int bulletNumber, float speed, float coneAngle = -1f,
+        Vector3? direction = null)
     {
         var position = turret.transform.position;
 
-        var minAngle = -90;
-        var maxAngle = 90;
+        var minAngle = -90f;
+        var maxAngle = 90f;
+
+        if (coneAngle != -1f)
+        {
+            minAngle = -coneAngle / 2f;
+            maxAngle = coneAngle / 2f;
+        }
+
+        var withDirection = true;
+        float aimedAngle;
+        if (direction == null)
+        {
+            withDirection = false;
+            direction = new Vector3();
+            aimedAngle = 0;
+        }
+        else
+        {
+            aimedAngle = Mathf.Atan2(direction.Value.y, direction.Value.x) * Mathf.Rad2Deg;
+        }
+
+        turret.GunTranform.rotation = Quaternion.Euler(0, 0, aimedAngle + 90);
 
         for (var iBullet = 0; iBullet < bulletNumber; iBullet++)
         {
@@ -71,15 +93,30 @@ public class TurretsController : IInitializable, ITickable
             bullet.OwnerType = Bullet.BulletOwnerType.Boss;
             bullet.Position = new Vector3(position.x, position.y);
 
-            var angle = Mathf.Lerp(minAngle, maxAngle, iBullet / (float) (bulletNumber - 1));
-            var dy = Mathf.Sin(angle * Mathf.Deg2Rad);
+            float angle;
+            if (bulletNumber == 1)
+            {
+                angle = 0;
+            }
+            else
+            {
+                angle = Mathf.Lerp(minAngle, maxAngle, iBullet / (float) (bulletNumber - 1));
+            }
+
+            angle += aimedAngle;
+
             var dx = Mathf.Cos(angle * Mathf.Deg2Rad);
+            var dy = Mathf.Sin(angle * Mathf.Deg2Rad);
 
             // bullet.Velocity = new Vector3(-bulletSpeed * dx, -bulletSpeed * turret.BulletOrientation);
-            bullet.Velocity = new Vector3(-speed * dy * turret.BulletOrientation, -speed * dx * turret.BulletOrientation);
+            bullet.Velocity = new Vector3(
+                -speed * dx * (withDirection ? -1 : turret.BulletOrientation),
+                -speed * dy * (withDirection ? -1 : turret.BulletOrientation));
+
             var realAngle = Mathf.Atan2(bullet.Velocity.y, bullet.Velocity.x) * Mathf.Rad2Deg;
             bullet.transform.rotation = Quaternion.AngleAxis(realAngle - 90, Vector3.forward);
-            
+
+
             // bullet.Orientation = new Vector3(0f, 0f, angle * turret.BulletOrientation);
             // bullet.transform.rotation = Quaternion.LookRotation(bullet.Velocity);
         }

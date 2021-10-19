@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using DefaultNamespace;
 using DefaultNamespace.BossStates;
 using DefaultNamespace.GameStates;
+using DefaultNamespace.Helpers;
 using RedMagic.Zenject;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -18,7 +19,8 @@ public class MainSceneInstaller : MonoInstaller
 
         Container.BindController<BossController>();
         Container.BindController<BossStateController>();
-        Container.BindController<BossStatePhaseOne>();
+        Container.BindController<BossStateSeb1>();
+        // Container.BindController<BossStatePhaseOne>();
         // Container.BindController<BossStatePhaseTwo>();
         Container.BindController<BossStateDead>();
         // Container.BindController<EyeController>();
@@ -27,6 +29,7 @@ public class MainSceneInstaller : MonoInstaller
         Container.BindController<UIController>();
 
         Container.BindController<ShmupSettings>();
+        Container.BindController<ShmupHelper>();
 
         Container.BindController<GameStateController>();
         Container.BindController<InGameStateController>();

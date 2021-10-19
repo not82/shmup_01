@@ -26,6 +26,8 @@ public class ShipController : MonoBehaviour, IInitializable, IFixedTickable, ITi
     public float BulletSpeed = 10f;
     public float BulletOrientation = 1f;
 
+    public bool VerticalLocked = false;
+    
     public enum ActionMode
     {
         Weapon,
@@ -124,15 +126,18 @@ public class ShipController : MonoBehaviour, IInitializable, IFixedTickable, ITi
             dx = 1;
         }
 
-        // if (gamepad.leftStick.up.isPressed)
-        // {
-        //     dy = 1;
-        // }
-        //
-        // if (gamepad.leftStick.down.isPressed)
-        // {
-        //     dy = -1;
-        // }
+        if (!VerticalLocked)
+        {
+            if (gamepad.leftStick.up.isPressed)
+            {
+                dy = 1;
+            }
+        
+            if (gamepad.leftStick.down.isPressed)
+            {
+                dy = -1;
+            }
+        }
     }
 
     public void FixedTick()

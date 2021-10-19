@@ -35,21 +35,17 @@ public class BossController : IInitializable, ITickable
     {
         hp = maxHp;
         spawnTime = Time.realtimeSinceStartup;
-        bossStateController.SetState(BossState.Phase1);
+        bossStateController.SetState(BossState.Seb1);
     }
 
     public void Tick()
     {
-        // var dx = 0;
-        // var dy = 0;
-        // var speed = 0.01f;
-
         var dt = Time.realtimeSinceStartup - spawnTime;
         var amplitudeX = 0.5f;
         var amplitudeY = 0.2f;
         var dx = Mathf.Sin(dt) + 0.5f * Mathf.Sin(dt * 2f);
         var dy = Mathf.Cos(dt) + 0.5f * Mathf.Cos(dt * 2f);
-
+        
         transform.position = new Vector3(basePosition.x + dx * amplitudeX, basePosition.y + dy * amplitudeY);
     }
 

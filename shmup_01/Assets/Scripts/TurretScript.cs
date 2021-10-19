@@ -10,12 +10,16 @@ namespace DefaultNamespace
         public float Hp;
 
         public float BulletOrientation = 1f;
-        
+
         public SpriteRenderer SR;
         public Transform Transform;
         public BoxCollider2D BC;
         public ShieldScript ShieldScript;
-                
+
+        public ShipController CurrentTarget;
+
+        public Transform GunTranform;
+
         private Sequence hitSequence;
         private Material defaultMaterial;
 

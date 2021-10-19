@@ -8,11 +8,11 @@ namespace DefaultNamespace
     {
         public void Initialize()
         {
-            AddState(BossState.Phase1, bossStatePhaseOne);
+            AddState(BossState.Seb1, bossStateSeb1);
             AddState(BossState.Dead, bossStateDead);
         }
 
-        [Inject] private BossStatePhaseOne bossStatePhaseOne;
+        [Inject] private BossStateSeb1 bossStateSeb1;
         [Inject] private BossStateDead bossStateDead;
     }
 }
