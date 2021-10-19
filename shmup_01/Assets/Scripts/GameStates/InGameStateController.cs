@@ -17,20 +17,20 @@ namespace DefaultNamespace.GameStates
         {
             if (IsActive)
             {
+                CurrentTime.SetValue(gameController.GetCurrentTime());
+
                 if (bossStateController.GetCurrentState() == BossState.Dead)
                 {
                     gameStateController.SetState(GameState.Success);
                 }
 
-
-                shipControllers.ForEach(shipController =>
+                var totalHp = 0;
+                shipControllers.ForEach(shipController => { totalHp += shipController.hp; });
+                if (totalHp <= 0f)
                 {
-                    if (shipController.hp <= 0f)
-                    {
-                        gameStateController.SetState(GameState.GameOver);
-                    }
-                });
-                
+                    gameStateController.SetState(GameState.GameOver);
+                }
+
                 if (Gamepad.current.startButton.wasPressedThisFrame)
                 {
                     gameStateController.SetState(GameState.InGame);
@@ -45,6 +45,7 @@ namespace DefaultNamespace.GameStates
             shipControllers.ForEach(shipController => { shipController.Reset(); });
             bossController.Reset();
             turretsController.Reset();
+            base.OnEnter();
         }
 
         public override void OnExit()
@@ -58,5 +59,6 @@ namespace DefaultNamespace.GameStates
         [Inject] private BossStateController bossStateController;
         [Inject] private TurretsController turretsController;
         [Inject] private GameController gameController;
+        [Inject(Id = "UI/CurrentTime")] private TimeScript CurrentTime;
     }
 }

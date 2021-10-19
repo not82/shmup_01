@@ -225,6 +225,7 @@ public class ShipController : MonoBehaviour, IInitializable, IFixedTickable, ITi
         if (otherCollider == _boxCollider2D && bullet.OwnerType == Bullet.BulletOwnerType.Boss)
         {
             hp -= 1;
+            hp = Math.Max(0, hp);
             LifesScript.SetValue(hp);
             hitSequence.Restart();
             ShowCircle();
@@ -235,6 +236,7 @@ public class ShipController : MonoBehaviour, IInitializable, IFixedTickable, ITi
             bullet.Owner != gameObject)
         {
             hp -= 1;
+            hp = Math.Max(0, hp);
             LifesScript.SetValue(hp);
             hitSequence.Restart();
             ShowCircle();

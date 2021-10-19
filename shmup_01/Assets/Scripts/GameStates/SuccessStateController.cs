@@ -29,6 +29,8 @@ namespace DefaultNamespace.GameStates
             base.OnEnter();
             successRT.gameObject.SetActive(true);
             successText.text = "You defeated the boss in " + gameController.GetCurrentTime().ToString("F1") + "s";
+            gameController.CheckHighScore();
+            highscore.SetValue(gameController.GetBestTime());
         }
 
         public override void OnExit()
@@ -41,5 +43,6 @@ namespace DefaultNamespace.GameStates
 
         [Inject] private GameStateController _gameStateController;
         [Inject] private GameController gameController;
+        [Inject(Id = "UI/HighscoreTime")] private TimeScript highscore;
     }
 }
